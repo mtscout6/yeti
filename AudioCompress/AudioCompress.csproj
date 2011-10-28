@@ -92,7 +92,7 @@
       <Project>{1B8BC4C2-987D-4C5C-B9F5-55056437F992}</Project>
       <Name>yeti.common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\yeti.mmedia\yeti.wav.csproj">
+    <ProjectReference Include="..\yeti.wav\yeti.wav.csproj">
       <Name>yeti.wav</Name>
       <Project>{315EE7BF-EAE2-42C0-BFC6-CCA9160F3CFE}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>

@@ -1,8 +1,8 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "yeti.wma", "yeti.wmfsdk\yeti.wma.csproj", "{FECB5BEB-AB05-454A-BB14-6A554E897274}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "yeti.wma", "yeti.wma\yeti.wma.csproj", "{FECB5BEB-AB05-454A-BB14-6A554E897274}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "yeti.wav", "yeti.mmedia\yeti.wav.csproj", "{315EE7BF-EAE2-42C0-BFC6-CCA9160F3CFE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "yeti.wav", "yeti.wav\yeti.wav.csproj", "{315EE7BF-EAE2-42C0-BFC6-CCA9160F3CFE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "yeti.mp3", "yeti.mp3\yeti.mp3.csproj", "{B564FD33-FA50-46B2-B669-2D83DE3AF5E4}"
 EndProject
