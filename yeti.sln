@@ -1,12 +1,20 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "yeti.wmfsdk", "yeti.wmfsdk\yeti.wmfsdk.csproj", "{FECB5BEB-AB05-454A-BB14-6A554E897274}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "yeti.wma", "yeti.wmfsdk\yeti.wma.csproj", "{FECB5BEB-AB05-454A-BB14-6A554E897274}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "yeti.mmedia", "yeti.mmedia\yeti.mmedia.csproj", "{315EE7BF-EAE2-42C0-BFC6-CCA9160F3CFE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "yeti.wav", "yeti.mmedia\yeti.wav.csproj", "{315EE7BF-EAE2-42C0-BFC6-CCA9160F3CFE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "yeti.mp3", "yeti.mp3\yeti.mp3.csproj", "{B564FD33-FA50-46B2-B669-2D83DE3AF5E4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioCompress", "AudioCompress\AudioCompress.csproj", "{80F14B3E-4F84-4B54-96CA-971D4D528107}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "yeti.common", "yeti.common\yeti.common.csproj", "{1B8BC4C2-987D-4C5C-B9F5-55056437F992}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "yeti.mp3.controls", "yeti.mp3.controls\yeti.mp3.controls.csproj", "{9CA41066-8ECE-4E0B-9109-A8467CEA48CB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "yeti.common.controls", "yeti.common.controls\yeti.common.controls.csproj", "{2F539EFD-1D65-4679-8C2D-6ED0A98D38F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "yeti.wav.controls", "yeti.wav.controls\yeti.wav.controls.csproj", "{6A6CBAED-CE9F-4772-9A4B-A7B61D8433EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,6 +38,22 @@ Global
 		{80F14B3E-4F84-4B54-96CA-971D4D528107}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80F14B3E-4F84-4B54-96CA-971D4D528107}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80F14B3E-4F84-4B54-96CA-971D4D528107}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B8BC4C2-987D-4C5C-B9F5-55056437F992}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B8BC4C2-987D-4C5C-B9F5-55056437F992}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B8BC4C2-987D-4C5C-B9F5-55056437F992}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B8BC4C2-987D-4C5C-B9F5-55056437F992}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CA41066-8ECE-4E0B-9109-A8467CEA48CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CA41066-8ECE-4E0B-9109-A8467CEA48CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CA41066-8ECE-4E0B-9109-A8467CEA48CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CA41066-8ECE-4E0B-9109-A8467CEA48CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F539EFD-1D65-4679-8C2D-6ED0A98D38F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F539EFD-1D65-4679-8C2D-6ED0A98D38F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F539EFD-1D65-4679-8C2D-6ED0A98D38F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F539EFD-1D65-4679-8C2D-6ED0A98D38F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A6CBAED-CE9F-4772-9A4B-A7B61D8433EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A6CBAED-CE9F-4772-9A4B-A7B61D8433EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A6CBAED-CE9F-4772-9A4B-A7B61D8433EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A6CBAED-CE9F-4772-9A4B-A7B61D8433EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

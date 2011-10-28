@@ -1,0 +1,243 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.30319</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{FECB5BEB-AB05-454A-BB14-6A554E897274}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon />
+    <AssemblyKeyContainerName />
+    <AssemblyName>yeti.wma</AssemblyName>
+    <AssemblyOriginatorKeyFile />
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>yeti.wma</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject />
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <OldToolsVersion>0.0</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile />
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile />
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn />
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile />
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile />
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn />
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\yeti.common\yeti.common.csproj">
+      <Project>{1B8BC4C2-987D-4C5C-B9F5-55056437F992}</Project>
+      <Name>yeti.common</Name>
+    </ProjectReference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="interfaces\INSSBuffer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="structs\WMT_TIMECODE_EXTENSION_DATA.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="interfaces\INSSBuffer2.cs" />
+    <Compile Include="interfaces\INSSBuffer3.cs" />
+    <Compile Include="interfaces\INSSBuffer4.cs" />
+    <Compile Include="interfaces\IWMBandwidthSharing.cs" />
+    <Compile Include="interfaces\IWMHeaderInfo.cs" />
+    <Compile Include="interfaces\IWMHeaderInfo2.cs" />
+    <Compile Include="interfaces\IWMHeaderInfo3.cs" />
+    <Compile Include="interfaces\IWMIndexer.cs" />
+    <Compile Include="interfaces\IWMIndexer2.cs" />
+    <Compile Include="interfaces\IWMInputMediaProps.cs" />
+    <Compile Include="interfaces\IWMMediaProps.cs" />
+    <Compile Include="interfaces\IWMMetadataEditor.cs" />
+    <Compile Include="interfaces\IWMMetadataEditor2.cs" />
+    <Compile Include="interfaces\IWMMutualExclusion.cs" />
+    <Compile Include="interfaces\IWMMutualExclusion2.cs" />
+    <Compile Include="interfaces\IWMOutputMediaProps.cs" />
+    <Compile Include="interfaces\IWMProfile.cs" />
+    <Compile Include="interfaces\IWMProfile2.cs" />
+    <Compile Include="interfaces\IWMProfile3.cs" />
+    <Compile Include="interfaces\IWMProfileManager.cs" />
+    <Compile Include="interfaces\IWMProfileManager2.cs" />
+    <Compile Include="interfaces\IWMProfileManagerLanguage.cs" />
+    <Compile Include="interfaces\IWMReader.cs" />
+    <Compile Include="interfaces\IWMReaderAdvanced.cs" />
+    <Compile Include="interfaces\IWMReaderAdvanced2.cs" />
+    <Compile Include="interfaces\IWMReaderAdvanced3.cs" />
+    <Compile Include="interfaces\IWMReaderAdvanced4.cs" />
+    <Compile Include="interfaces\IWMReaderAllocatorEx.cs" />
+    <Compile Include="interfaces\IWMReaderCallback.cs" />
+    <Compile Include="interfaces\IWMSBufferAllocator.cs" />
+    <Compile Include="interfaces\IWMStatusCallback.cs" />
+    <Compile Include="interfaces\IWMStreamConfig2.cs" />
+    <Compile Include="interfaces\IWMStreamConfig3.cs" />
+    <Compile Include="interfaces\IWMStreamList.cs" />
+    <Compile Include="interfaces\IWMStreamPrioritization.cs" />
+    <Compile Include="interfaces\IWMSyncReader.cs" />
+    <Compile Include="interfaces\IWMSyncReader2.cs" />
+    <Compile Include="interfaces\IWMVideoMediaProps.cs" />
+    <Compile Include="interfaces\IWMWriter.cs" />
+    <Compile Include="interfaces\IWMWriterAdvanced.cs" />
+    <Compile Include="interfaces\IWMWriterAdvanced2.cs" />
+    <Compile Include="interfaces\IWMWriterAdvanced3.cs" />
+    <Compile Include="interfaces\IWMWriterFileSink.cs" />
+    <Compile Include="interfaces\IWMWriterFileSink2.cs" />
+    <Compile Include="interfaces\IWMWriterFileSink3.cs" />
+    <Compile Include="interfaces\IWMWriterNetworkSink.cs" />
+    <Compile Include="interfaces\IWMWriterPreprocess.cs" />
+    <Compile Include="interfaces\IWMWriterPushSink.cs" />
+    <Compile Include="interfaces\IWMWriterSink.cs" />
+    <Compile Include="internals\ManBuffer.cs" />
+    <Compile Include="structs\Marker.cs" />
+    <Compile Include="internals\MediaTypes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="internals\NSSBuffer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="interfaces\IWMStreamConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="structs\WM_READER_CLIENTINFO.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="structs\Script.cs" />
+    <Compile Include="WmaStream.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WmaWriter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WmaWriterConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="internals\WM.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="internals\WMHeaderInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WMProfile.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WMStreamConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="enums\WMT_ATTR_DATATYPE.cs" />
+    <Compile Include="structs\WMT_BUFFER_SEGMENT.cs" />
+    <Compile Include="enums\WMT_CODEC_INFO_TYPE.cs" />
+    <Compile Include="structs\WMT_FILESINK_DATA_UNIT.cs" />
+    <Compile Include="enums\WMT_INDEXER_TYPE.cs" />
+    <Compile Include="enums\WMT_INDEX_TYPE.cs" />
+    <Compile Include="enums\WMT_NET_PROTOCOL.cs" />
+    <Compile Include="enums\WMT_OFFSET_FORMAT.cs" />
+    <Compile Include="structs\WMT_PAYLOAD_FRAGMENT.cs" />
+    <Compile Include="enums\WMT_PLAY_MODE.cs" />
+    <Compile Include="enums\WMT_RIGHTS.cs" />
+    <Compile Include="enums\WMT_STATUS.cs" />
+    <Compile Include="enums\WMT_STORAGE_FORMAT.cs" />
+    <Compile Include="enums\WMT_STREAM_SELECTION.cs" />
+    <Compile Include="enums\WMT_TRANSPORT_TYPE.cs" />
+    <Compile Include="enums\WMT_VERSION.cs" />
+    <Compile Include="structs\WM_Attr.cs" />
+    <Compile Include="structs\WM_MEDIA_TYPE.cs" />
+    <Compile Include="structs\WM_READER_STATISTICS.cs" />
+    <Compile Include="structs\WM_STREAM_PRIORITY_RECORD.cs" />
+    <Compile Include="structs\WM_WRITER_STATISTICS_EX.cs" />
+    <Compile Include="structs\WM_WRITER_STATISTICS.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent />
+    <PostBuildEvent />
+  </PropertyGroup>
+</Project>
