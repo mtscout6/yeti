@@ -171,6 +171,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="structs\Script.cs" />
+    <Compile Include="WmaFunctions.cs" />
     <Compile Include="WmaStream.cs">
       <SubType>Code</SubType>
     </Compile>
