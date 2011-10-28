@@ -16,7 +16,7 @@
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
     <OutputType>Library</OutputType>
-    <RootNamespace>Yeti.MMedia.Mp3</RootNamespace>
+    <RootNamespace>yeti.mp3</RootNamespace>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <StartupObject />
     <FileUpgradeFlags>
@@ -84,10 +84,9 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\yeti.mmedia\yeti.mmedia.csproj">
-      <Name>yeti.mmedia</Name>
-      <Project>{315EE7BF-EAE2-42C0-BFC6-CCA9160F3CFE}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    <ProjectReference Include="..\yeti.common\yeti.common.csproj">
+      <Project>{1B8BC4C2-987D-4C5C-B9F5-55056437F992}</Project>
+      <Name>yeti.common</Name>
     </ProjectReference>
     <Reference Include="System">
       <Name>System</Name>
@@ -95,35 +94,32 @@
     <Reference Include="System.Data">
       <Name>System.Data</Name>
     </Reference>
-    <Reference Include="System.Drawing">
-      <Name>System.Drawing</Name>
-    </Reference>
-    <Reference Include="System.Windows.Forms">
-      <Name>System.Windows.Forms</Name>
-    </Reference>
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="structs\ACC.cs" />
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="EditMp3Writer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Lame.cs">
+    <Compile Include="configuration\BE_CONFIG.cs" />
+    <Compile Include="configuration\BE_VERSION.cs" />
+    <Compile Include="configuration\Format.cs" />
+    <Compile Include="structs\MP3.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="configuration\Lame_encDll.cs" />
+    <Compile Include="enums\LAME_QUALITY_PRESET.cs" />
+    <Compile Include="structs\LHV1.cs" />
     <Compile Include="Mp3Writer.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Mp3WriterConfig.cs">
       <SubType>Code</SubType>
     </Compile>
-    <EmbeddedResource Include="EditMp3Writer.resx">
-      <DependentUpon>EditMp3Writer.cs</DependentUpon>
-    </EmbeddedResource>
+    <Compile Include="enums\MpegMode.cs" />
+    <Compile Include="enums\VBRMETHOD.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
