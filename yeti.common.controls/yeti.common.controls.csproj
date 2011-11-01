@@ -52,9 +52,9 @@
     <Compile Include="Win32.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\yeti.common\yeti.common.csproj">
+    <ProjectReference Include="..\yeti\yeti.csproj">
       <Project>{1B8BC4C2-987D-4C5C-B9F5-55056437F992}</Project>
-      <Name>yeti.common</Name>
+      <Name>yeti</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

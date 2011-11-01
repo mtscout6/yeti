@@ -88,22 +88,13 @@
       <Project>{2F539EFD-1D65-4679-8C2D-6ED0A98D38F9}</Project>
       <Name>yeti.common.controls</Name>
     </ProjectReference>
-    <ProjectReference Include="..\yeti.common\yeti.common.csproj">
+    <ProjectReference Include="..\yeti\yeti.csproj">
       <Project>{1B8BC4C2-987D-4C5C-B9F5-55056437F992}</Project>
-      <Name>yeti.common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\yeti.wav\yeti.wav.csproj">
-      <Name>yeti.wav</Name>
-      <Project>{315EE7BF-EAE2-42C0-BFC6-CCA9160F3CFE}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+      <Name>yeti</Name>
     </ProjectReference>
     <ProjectReference Include="..\yeti.mp3.controls\yeti.mp3.controls.csproj">
       <Project>{9CA41066-8ECE-4E0B-9109-A8467CEA48CB}</Project>
       <Name>yeti.mp3.controls</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\yeti.mp3\yeti.mp3.csproj">
-      <Project>{B564FD33-FA50-46B2-B669-2D83DE3AF5E4}</Project>
-      <Name>yeti.mp3</Name>
     </ProjectReference>
     <ProjectReference Include="..\yeti.wav.controls\yeti.wav.controls.csproj">
       <Project>{6A6CBAED-CE9F-4772-9A4B-A7B61D8433EA}</Project>

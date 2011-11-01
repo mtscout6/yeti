@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1B8BC4C2-987D-4C5C-B9F5-55056437F992}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>yeti</RootNamespace>
+    <AssemblyName>yeti</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AudioWriter.cs" />
+    <Compile Include="mp3\configuration\BE_CONFIG.cs" />
+    <Compile Include="mp3\configuration\BE_VERSION.cs" />
+    <Compile Include="mp3\configuration\Format.cs" />
+    <Compile Include="mp3\configuration\Lame_encDll.cs" />
+    <Compile Include="mp3\enums\LAME_QUALITY_PRESET.cs" />
+    <Compile Include="mp3\enums\MpegMode.cs" />
+    <Compile Include="mp3\enums\VBRMETHOD.cs" />
+    <Compile Include="mp3\Mp3Writer.cs" />
+    <Compile Include="mp3\Mp3WriterConfig.cs" />
+    <Compile Include="mp3\structs\ACC.cs" />
+    <Compile Include="mp3\structs\LHV1.cs" />
+    <Compile Include="mp3\structs\MP3.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WaveFormat.cs" />
+    <Compile Include="WaveFormats.cs" />
+    <Compile Include="WaveNative.cs" />
+    <Compile Include="AudioWriterConfig.cs" />
+    <Compile Include="wav\WaveStream.cs" />
+    <Compile Include="wav\WaveWriter.cs" />
+    <Compile Include="wma\enums\WMT_ATTR_DATATYPE.cs" />
+    <Compile Include="wma\enums\WMT_CODEC_INFO_TYPE.cs" />
+    <Compile Include="wma\enums\WMT_INDEXER_TYPE.cs" />
+    <Compile Include="wma\enums\WMT_INDEX_TYPE.cs" />
+    <Compile Include="wma\enums\WMT_NET_PROTOCOL.cs" />
+    <Compile Include="wma\enums\WMT_OFFSET_FORMAT.cs" />
+    <Compile Include="wma\enums\WMT_PLAY_MODE.cs" />
+    <Compile Include="wma\enums\WMT_RIGHTS.cs" />
+    <Compile Include="wma\enums\WMT_STATUS.cs" />
+    <Compile Include="wma\enums\WMT_STORAGE_FORMAT.cs" />
+    <Compile Include="wma\enums\WMT_STREAM_SELECTION.cs" />
+    <Compile Include="wma\enums\WMT_TRANSPORT_TYPE.cs" />
+    <Compile Include="wma\enums\WMT_VERSION.cs" />
+    <Compile Include="wma\interfaces\INSSBuffer.cs" />
+    <Compile Include="wma\interfaces\INSSBuffer2.cs" />
+    <Compile Include="wma\interfaces\INSSBuffer3.cs" />
+    <Compile Include="wma\interfaces\INSSBuffer4.cs" />
+    <Compile Include="wma\interfaces\IWMBandwidthSharing.cs" />
+    <Compile Include="wma\interfaces\IWMHeaderInfo.cs" />
+    <Compile Include="wma\interfaces\IWMHeaderInfo2.cs" />
+    <Compile Include="wma\interfaces\IWMHeaderInfo3.cs" />
+    <Compile Include="wma\interfaces\IWMIndexer.cs" />
+    <Compile Include="wma\interfaces\IWMIndexer2.cs" />
+    <Compile Include="wma\interfaces\IWMInputMediaProps.cs" />
+    <Compile Include="wma\interfaces\IWMMediaProps.cs" />
+    <Compile Include="wma\interfaces\IWMMetadataEditor.cs" />
+    <Compile Include="wma\interfaces\IWMMetadataEditor2.cs" />
+    <Compile Include="wma\interfaces\IWMMutualExclusion.cs" />
+    <Compile Include="wma\interfaces\IWMMutualExclusion2.cs" />
+    <Compile Include="wma\interfaces\IWMOutputMediaProps.cs" />
+    <Compile Include="wma\interfaces\IWMProfile.cs" />
+    <Compile Include="wma\interfaces\IWMProfile2.cs" />
+    <Compile Include="wma\interfaces\IWMProfile3.cs" />
+    <Compile Include="wma\interfaces\IWMProfileManager.cs" />
+    <Compile Include="wma\interfaces\IWMProfileManager2.cs" />
+    <Compile Include="wma\interfaces\IWMProfileManagerLanguage.cs" />
+    <Compile Include="wma\interfaces\IWMReader.cs" />
+    <Compile Include="wma\interfaces\IWMReaderAdvanced.cs" />
+    <Compile Include="wma\interfaces\IWMReaderAdvanced2.cs" />
+    <Compile Include="wma\interfaces\IWMReaderAdvanced3.cs" />
+    <Compile Include="wma\interfaces\IWMReaderAdvanced4.cs" />
+    <Compile Include="wma\interfaces\IWMReaderAllocatorEx.cs" />
+    <Compile Include="wma\interfaces\IWMReaderCallback.cs" />
+    <Compile Include="wma\interfaces\IWMSBufferAllocator.cs" />
+    <Compile Include="wma\interfaces\IWMStatusCallback.cs" />
+    <Compile Include="wma\interfaces\IWMStreamConfig.cs" />
+    <Compile Include="wma\interfaces\IWMStreamConfig2.cs" />
+    <Compile Include="wma\interfaces\IWMStreamConfig3.cs" />
+    <Compile Include="wma\interfaces\IWMStreamList.cs" />
+    <Compile Include="wma\interfaces\IWMStreamPrioritization.cs" />
+    <Compile Include="wma\interfaces\IWMSyncReader.cs" />
+    <Compile Include="wma\interfaces\IWMSyncReader2.cs" />
+    <Compile Include="wma\interfaces\IWMVideoMediaProps.cs" />
+    <Compile Include="wma\interfaces\IWMWriter.cs" />
+    <Compile Include="wma\interfaces\IWMWriterAdvanced.cs" />
+    <Compile Include="wma\interfaces\IWMWriterAdvanced2.cs" />
+    <Compile Include="wma\interfaces\IWMWriterAdvanced3.cs" />
+    <Compile Include="wma\interfaces\IWMWriterFileSink.cs" />
+    <Compile Include="wma\interfaces\IWMWriterFileSink2.cs" />
+    <Compile Include="wma\interfaces\IWMWriterFileSink3.cs" />
+    <Compile Include="wma\interfaces\IWMWriterNetworkSink.cs" />
+    <Compile Include="wma\interfaces\IWMWriterPreprocess.cs" />
+    <Compile Include="wma\interfaces\IWMWriterPushSink.cs" />
+    <Compile Include="wma\interfaces\IWMWriterSink.cs" />
+    <Compile Include="wma\internals\ManBuffer.cs" />
+    <Compile Include="wma\internals\MediaTypes.cs" />
+    <Compile Include="wma\internals\NSSBuffer.cs" />
+    <Compile Include="wma\internals\WM.cs" />
+    <Compile Include="wma\internals\WMHeaderInfo.cs" />
+    <Compile Include="wma\structs\Marker.cs" />
+    <Compile Include="wma\structs\Script.cs" />
+    <Compile Include="wma\structs\WMT_BUFFER_SEGMENT.cs" />
+    <Compile Include="wma\structs\WMT_FILESINK_DATA_UNIT.cs" />
+    <Compile Include="wma\structs\WMT_PAYLOAD_FRAGMENT.cs" />
+    <Compile Include="wma\structs\WMT_TIMECODE_EXTENSION_DATA.cs" />
+    <Compile Include="wma\structs\WM_Attr.cs" />
+    <Compile Include="wma\structs\WM_MEDIA_TYPE.cs" />
+    <Compile Include="wma\structs\WM_READER_CLIENTINFO.cs" />
+    <Compile Include="wma\structs\WM_READER_STATISTICS.cs" />
+    <Compile Include="wma\structs\WM_STREAM_PRIORITY_RECORD.cs" />
+    <Compile Include="wma\structs\WM_WRITER_STATISTICS.cs" />
+    <Compile Include="wma\structs\WM_WRITER_STATISTICS_EX.cs" />
+    <Compile Include="wma\WmaFunctions.cs" />
+    <Compile Include="wma\WmaStream.cs" />
+    <Compile Include="wma\WmaWriter.cs" />
+    <Compile Include="wma\WmaWriterConfig.cs" />
+    <Compile Include="wma\WMProfile.cs" />
+    <Compile Include="wma\WMStreamConfig.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\lame_enc.dll">
+      <Link>lame_enc.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

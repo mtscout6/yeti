@@ -21,8 +21,8 @@
 //  For details, please visit http://www.mp3licensing.com.
 //
 
+using yeti;
 using yeti.mp3.configuration;
-using yeti.common;
 using yeti.mp3;
 using yeti.mp3.controls;
 

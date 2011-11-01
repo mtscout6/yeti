@@ -53,13 +53,9 @@
       <Project>{2F539EFD-1D65-4679-8C2D-6ED0A98D38F9}</Project>
       <Name>yeti.common.controls</Name>
     </ProjectReference>
-    <ProjectReference Include="..\yeti.common\yeti.common.csproj">
+    <ProjectReference Include="..\yeti\yeti.csproj">
       <Project>{1B8BC4C2-987D-4C5C-B9F5-55056437F992}</Project>
-      <Name>yeti.common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\yeti.mp3\yeti.mp3.csproj">
-      <Project>{B564FD33-FA50-46B2-B669-2D83DE3AF5E4}</Project>
-      <Name>yeti.mp3</Name>
+      <Name>yeti</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
