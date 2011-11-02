@@ -3,7 +3,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using STATSTG = System.Runtime.InteropServices.STATSTG;
 
-namespace yeti.wma
+namespace yeti.wma.internals
 {
     /// <summary>
     /// Incomplete readonly implementation of the UCOMIStream interface. 

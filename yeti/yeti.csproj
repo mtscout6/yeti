@@ -37,7 +37,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AudioWriter.cs" />
-    <Compile Include="wma\ComStreamWrapper.cs" />
+    <Compile Include="wma\internals\ComStreamWrapper.cs" />
     <Compile Include="conversions\ConversionsBase.cs" />
     <Compile Include="conversions\WmaConversions.cs" />
     <Compile Include="mp3\configuration\BE_CONFIG.cs" />
