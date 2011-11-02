@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using yeti.common.controls.interfaces;
 
 namespace yeti.common.controls.interfaces
 {

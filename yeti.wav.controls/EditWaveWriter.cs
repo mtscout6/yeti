@@ -13,7 +13,6 @@
 
 using System.ComponentModel;
 using System.Windows.Forms;
-using yeti.common;
 using yeti.common.controls;
 using yeti.common.controls.interfaces;
 
