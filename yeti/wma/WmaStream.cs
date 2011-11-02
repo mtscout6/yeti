@@ -608,6 +608,11 @@ namespace yeti.wma
             }
         }
 
+        public TimeSpan Duration
+        {
+            get { return TimeSpan.FromSeconds(Length / Format.nAvgBytesPerSec); }
+        }
+
         public override long Position
         {
             get
