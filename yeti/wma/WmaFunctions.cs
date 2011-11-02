@@ -78,6 +78,16 @@ namespace yeti.wma
         /// <summary>
         /// Combines files into one in the order they are passed in..
         /// </summary>
+        /// <param name="inputStreams">The streams to combine</param>
+        /// <param name="outputStream">The stream to save the combined file to.</param>
+        public static void Combine(Stream outputStream, params Stream[] inputStreams)
+        {
+            Combine(outputStream, 1, inputStreams);
+        }
+
+        /// <summary>
+        /// Combines files into one in the order they are passed in..
+        /// </summary>
         /// <param name="bufferMultiplier">The multiplier to use against the OptimalBufferSize of the file for the read buffer, sometimes a larger than optimal buffer size is better.</param>
         /// <param name="inputStreams">The streams to combine</param>
         /// <param name="outputStream">The stream to save the combined file to.</param>
