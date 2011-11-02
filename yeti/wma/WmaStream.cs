@@ -67,12 +67,49 @@ namespace yeti.wma
         }
 
         /// <summary>
+        /// Create WmaStream with specific format for for uncompressed audio data.
+        /// </summary>
+        /// <param name="inputStream">Name of asf stream</param>
+        /// <param name="OutputFormat">WaveFormat that define the desired audio data format</param>
+        public WmaStream(Stream inputStream, WaveFormat OutputFormat)
+        {
+            m_Reader = WM.CreateSyncReader(WMT_RIGHTS.WMT_RIGHT_NO_DRM);
+            try
+            {
+                m_Reader.OpenStream(new ComStreamWrapper(inputStream));
+                Init(OutputFormat);
+            }
+            catch
+            {
+                try
+                {
+                    m_Reader.Close();
+                }
+                catch
+                {
+                }
+                m_Reader = null;
+                throw;
+            }
+        }
+
+        /// <summary>
         /// Create WmaStream. The first PCM available for audio outputs will be used as output format.
         /// Output format can be checked in <see cref="Format"/> property.
         /// </summary>
         /// <param name="FileName">Name of asf file</param>
         public WmaStream(string FileName)
             : this(FileName, null)
+        {
+        }
+
+        /// <summary>
+        /// Create WmaStream. The first PCM available for audio outputs will be used as output format.
+        /// Output format can be checked in <see cref="Format"/> property.
+        /// </summary>
+        /// <param name="inputStream">Name of asf stream</param>
+        public WmaStream(Stream inputStream)
+            : this(inputStream, null)
         {
         }
 

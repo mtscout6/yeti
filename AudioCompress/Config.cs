@@ -22,8 +22,8 @@
 //
 
 using yeti;
-using yeti.mp3.configuration;
 using yeti.mp3;
+using yeti.mp3.configuration;
 using yeti.mp3.controls;
 
 namespace AudioCompress

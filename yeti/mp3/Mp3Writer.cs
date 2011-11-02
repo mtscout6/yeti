@@ -140,7 +140,9 @@ namespace yeti.mp3
                 }
             }
             closed = true;
-            base.Close();
+            //Purposefully leaving the stream open since it gets passed in, 
+            //its the responsibility of the calling class to manage its own resources.
+            base.Flush();
         }
 
 

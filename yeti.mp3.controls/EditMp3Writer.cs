@@ -26,11 +26,11 @@
 //
 
 using System.Windows.Forms;
+using yeti.common.controls;
+using yeti.mp3;
 using yeti.mp3.configuration;
 using yeti.mp3.enums;
 using yeti.mp3.structs;
-using yeti.common;
-using yeti.common.controls;
 using yeti.common.controls.interfaces;
 
 namespace yeti.mp3.controls

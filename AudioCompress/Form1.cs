@@ -23,8 +23,8 @@
 using System;
 using System.Windows.Forms;
 using System.IO;
-using yeti.wav;
 using yeti.mp3;
+using yeti.wav;
 
 namespace AudioCompress
 {
