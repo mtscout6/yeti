@@ -96,7 +96,10 @@ namespace yeti.wma
             if (inputStreams.Length <= 0)
                 return;
 
-            var wmaInput = new WmaStream(inputStreams[0]);
+            var wmaInput = inputStreams[0] is WmaStream
+                ? (WmaStream)inputStreams[0]
+                : new WmaStream(inputStreams[0]);
+
             var wmaOutput = new WmaWriter(outputStream,
                                           wmaInput.Format,
                                           wmaInput.Profile);
@@ -107,7 +110,10 @@ namespace yeti.wma
                 WriteFile(wmaOutput, wmaInput, buffer);
                 for (var i = 1; i < inputStreams.Length; i++)
                 {
-                    WriteFile(wmaOutput, new WmaStream(inputStreams[i]), buffer);
+                    wmaInput = inputStreams[i] is WmaStream
+                        ? (WmaStream)inputStreams[i]
+                        : new WmaStream(inputStreams[i]);
+                    WriteFile(wmaOutput, wmaInput, buffer);
                 }
             }
             finally
@@ -213,7 +219,7 @@ namespace yeti.wma
         /// <param name="bufferMultiplier">The multiplier to use against the OptimalBufferSize of the file for the read buffer, sometimes a larger than optimal buffer size is better.</param>
         public static void Split(Stream inputStream, Stream outputStream, TimeSpan startTime, TimeSpan endTime, int bufferMultiplier)
         {
-            var wmaInput = new WmaStream(inputStream);
+            var wmaInput = inputStream is WmaStream ? (WmaStream) inputStream : new WmaStream(inputStream);
             var wmaOutput = new WmaWriter(outputStream, wmaInput.Format, wmaInput.Profile);
             int bytesPerSec = wmaInput.Format.nAvgBytesPerSec;
             var stopPosition = (long)(bytesPerSec*endTime.TotalSeconds);

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using yeti.mp3;
 using yeti.mp3.configuration;
 using yeti.wav;
@@ -66,14 +67,26 @@ namespace yeti.conversions
         public static void WmaToMp3(
             Stream wmaInputStream, Stream outputStream, Mp3WriterConfig mp3Format, int bufferMultiplier)
         {
-            using (var wmaStream = new WmaStream(wmaInputStream))
+            WmaToMp3Delegate convert = wmaStream =>
+                                       {
+                                           var writer = new Mp3Writer(outputStream,
+                                                            mp3Format ?? new Mp3WriterConfig(wmaStream.Format, new BE_CONFIG(wmaStream.Format)));
+                                           var buffer = new byte[writer.OptimalBufferSize*bufferMultiplier];
+                                           WriteToFile(writer, wmaStream, buffer);
+                                       };
+
+            if (wmaInputStream is WmaStream)
+                convert((WmaStream)wmaInputStream);
+            else
             {
-                var writer = new Mp3Writer(outputStream,
-                    mp3Format ?? new Mp3WriterConfig(wmaStream.Format, new BE_CONFIG(wmaStream.Format)));
-                var buffer = new byte[writer.OptimalBufferSize*bufferMultiplier];
-                WriteToFile(writer, wmaStream, buffer);
+                using (var wmaStream = new WmaStream(wmaInputStream))
+                {
+                    convert(wmaStream);
+                }
             }
         }
+
+        private delegate void WmaToMp3Delegate(WmaStream wmaStream);
 
         public static void WmaToMp3(string wmafilePath, string outputPath, uint bitRate)
         {
