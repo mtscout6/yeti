@@ -103,6 +103,7 @@ namespace yeti.wma
             var wmaOutput = new WmaWriter(outputStream,
                                           wmaInput.Format,
                                           wmaInput.Profile);
+
             var buffer = new byte[wmaOutput.OptimalBufferSize * bufferMultiplier];
 
             try
@@ -225,7 +226,10 @@ namespace yeti.wma
             var stopPosition = (long)(bytesPerSec*endTime.TotalSeconds);
             var buffer = new byte[wmaOutput.OptimalBufferSize * bufferMultiplier];
 
-            wmaInput.Seek((long)(bytesPerSec*startTime.TotalSeconds), SeekOrigin.Begin);
+            var offset = (long) (bytesPerSec * startTime.TotalSeconds);
+            offset = offset - (offset % wmaInput.SeekAlign);
+
+            wmaInput.Seek(offset, SeekOrigin.Begin);
             try
             {
                 WriteFile(wmaOutput, wmaInput, buffer, stopPosition);
