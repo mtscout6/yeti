@@ -15,7 +15,7 @@ using System.IO;
 
 namespace yeti.wav
 {
-    public class WaveStream : Stream, IDisposable
+    public class WaveStream : Stream, IWaveStream
     {
         private Stream m_Stream;
         private long m_DataPos;

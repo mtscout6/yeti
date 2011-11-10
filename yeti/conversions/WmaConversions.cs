@@ -75,18 +75,18 @@ namespace yeti.conversions
                                            WriteToFile(writer, wmaStream, buffer);
                                        };
 
-            if (wmaInputStream is WmaStream)
-                convert((WmaStream)wmaInputStream);
+            if (wmaInputStream is WmaStreamReader)
+                convert((WmaStreamReader)wmaInputStream);
             else
             {
-                using (var wmaStream = new WmaStream(wmaInputStream))
+                using (var wmaStream = new WmaStreamReader(wmaInputStream))
                 {
                     convert(wmaStream);
                 }
             }
         }
 
-        private delegate void WmaToMp3Delegate(WmaStream wmaStream);
+        private delegate void WmaToMp3Delegate(WmaStreamReader wmaStream);
 
         public static void WmaToMp3(string wmafilePath, string outputPath, uint bitRate)
         {
@@ -122,7 +122,7 @@ namespace yeti.conversions
         public static void WmaToMp3(
             Stream wmaInputStream, Stream outputStream, uint bitRate, int bufferMultiplier)
         {
-            using (var wmaStream = new WmaStream(wmaInputStream))
+            using (var wmaStream = new WmaStreamReader(wmaInputStream))
             {
                 var writer = new Mp3Writer(outputStream,
                     new Mp3WriterConfig(wmaStream.Format, new BE_CONFIG(wmaStream.Format, bitRate)));
@@ -160,7 +160,7 @@ namespace yeti.conversions
         public static void WmaToWav(
             string wmafilePath, Stream outputStream, WaveFormat waveFormat, int bufferMultiplier)
         {
-            using (var wmaStream = new WmaStream(wmafilePath))
+            using (var wmaStream = new WmaStreamReader(wmafilePath))
             {
                 var writer = new WaveWriter(outputStream, waveFormat ?? wmaStream.Format);
                 var buffer = new byte[writer.OptimalBufferSize*bufferMultiplier];
@@ -187,7 +187,7 @@ namespace yeti.conversions
         public static void WmaToWma(
             string wmafilePath, Stream outputStream, WmaWriterConfig wmaFormat, int bufferMultiplier)
         {
-            using (var wmaStream = new WmaStream(wmafilePath))
+            using (var wmaStream = new WmaStreamReader(wmafilePath))
             {
                 var writer = new WmaWriter(outputStream, wmaFormat);
                 var buffer = new byte[writer.OptimalBufferSize*bufferMultiplier];

@@ -69,7 +69,7 @@ namespace yeti.wma
 
             for (var i = 0; i < filepaths.Length; i++)
             {
-                inputStreams[i] = new WmaStream(filepaths[i]);
+                inputStreams[i] = new WmaStreamReader(filepaths[i]);
             }
 
             Combine(outputStream, bufferMultiplier, inputStreams);
@@ -96,9 +96,9 @@ namespace yeti.wma
             if (inputStreams.Length <= 0)
                 return;
 
-            var wmaInput = inputStreams[0] is WmaStream
-                ? (WmaStream)inputStreams[0]
-                : new WmaStream(inputStreams[0]);
+            var wmaInput = inputStreams[0] is WmaStreamReader
+                ? (WmaStreamReader)inputStreams[0]
+                : new WmaStreamReader(inputStreams[0]);
 
             var wmaOutput = new WmaWriter(outputStream,
                                           wmaInput.Format,
@@ -111,9 +111,9 @@ namespace yeti.wma
                 WriteFile(wmaOutput, wmaInput, buffer);
                 for (var i = 1; i < inputStreams.Length; i++)
                 {
-                    wmaInput = inputStreams[i] is WmaStream
-                        ? (WmaStream)inputStreams[i]
-                        : new WmaStream(inputStreams[i]);
+                    wmaInput = inputStreams[i] is WmaStreamReader
+                        ? (WmaStreamReader)inputStreams[i]
+                        : new WmaStreamReader(inputStreams[i]);
                     WriteFile(wmaOutput, wmaInput, buffer);
                 }
             }
@@ -220,7 +220,7 @@ namespace yeti.wma
         /// <param name="bufferMultiplier">The multiplier to use against the OptimalBufferSize of the file for the read buffer, sometimes a larger than optimal buffer size is better.</param>
         public static void Split(Stream inputStream, Stream outputStream, TimeSpan startTime, TimeSpan endTime, int bufferMultiplier)
         {
-            var wmaInput = inputStream is WmaStream ? (WmaStream) inputStream : new WmaStream(inputStream);
+            var wmaInput = inputStream is WmaStreamReader ? (WmaStreamReader) inputStream : new WmaStreamReader(inputStream);
             var wmaOutput = new WmaWriter(outputStream, wmaInput.Format, wmaInput.Profile);
             int bytesPerSec = wmaInput.Format.nAvgBytesPerSec;
             var stopPosition = (long)(bytesPerSec*endTime.TotalSeconds);
@@ -240,12 +240,12 @@ namespace yeti.wma
             }
         }
 
-        private static void WriteFile(WmaWriter wmaOutput, WmaStream wmaInput, byte[] buffer)
+        private static void WriteFile(WmaWriter wmaOutput, WmaStreamReader wmaInput, byte[] buffer)
         {
             WriteFile(wmaOutput, wmaInput, buffer, -1);
         }
 
-        private static void WriteFile(WmaWriter wmaOutput, WmaStream wmaInput, byte[] buffer, long stopPosition)
+        private static void WriteFile(WmaWriter wmaOutput, WmaStreamReader wmaInput, byte[] buffer, long stopPosition)
         {
             if (stopPosition == -1)
             {

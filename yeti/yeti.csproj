@@ -37,6 +37,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AudioWriter.cs" />
+    <Compile Include="mp3\interfaces\IMp3Writer.cs" />
+    <Compile Include="wav\IWaveStream.cs" />
     <Compile Include="wma\internals\ComStreamWrapper.cs" />
     <Compile Include="conversions\ConversionsBase.cs" />
     <Compile Include="conversions\WmaConversions.cs" />
@@ -128,6 +130,8 @@
     <Compile Include="wma\internals\NSSBuffer.cs" />
     <Compile Include="wma\internals\WM.cs" />
     <Compile Include="wma\internals\WMHeaderInfo.cs" />
+    <Compile Include="wma\interfaces\IWmaStreamReader.cs" />
+    <Compile Include="wma\interfaces\IWmaWriter.cs" />
     <Compile Include="wma\structs\Marker.cs" />
     <Compile Include="wma\structs\Script.cs" />
     <Compile Include="wma\structs\WMT_BUFFER_SEGMENT.cs" />
@@ -142,7 +146,7 @@
     <Compile Include="wma\structs\WM_WRITER_STATISTICS.cs" />
     <Compile Include="wma\structs\WM_WRITER_STATISTICS_EX.cs" />
     <Compile Include="wma\WmaFunctions.cs" />
-    <Compile Include="wma\WmaStream.cs" />
+    <Compile Include="wma\WmaStreamReader.cs" />
     <Compile Include="wma\WmaWriter.cs" />
     <Compile Include="wma\WmaWriterConfig.cs" />
     <Compile Include="wma\WMProfile.cs" />

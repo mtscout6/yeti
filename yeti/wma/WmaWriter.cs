@@ -23,7 +23,7 @@ namespace yeti.wma
     /// <summary>
     /// Audio Writer to write Windows Media Audio data to a stream.
     /// </summary>
-    public class WmaWriter : AudioWriter, IWMWriterSink
+    public class WmaWriter : AudioWriter, IWMWriterSink, IWmaWriter
     {
         protected IWMWriter m_Writer;
         private IWMProfile m_Profile;

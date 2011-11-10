@@ -24,6 +24,7 @@
 using System;
 using System.IO;
 using yeti.mp3.configuration;
+using yeti.mp3.interfaces;
 
 namespace yeti.mp3
 {
@@ -34,7 +35,7 @@ namespace yeti.mp3
     /// <seealso cref="AudioWriter"/>
     /// <seealso cref="Yeti.Mp3"/>
     /// </summary>
-    public class Mp3Writer : AudioWriter
+    public class Mp3Writer : AudioWriter, IMp3Writer
     {
         private bool closed = false;
         private BE_CONFIG m_Mp3Config = null;
