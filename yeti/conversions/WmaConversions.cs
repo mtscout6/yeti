@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using yeti.mp3;
 using yeti.mp3.configuration;
 using yeti.wav;
@@ -11,47 +10,57 @@ namespace yeti.conversions
     {
         public static void WmaToMp3(string wmafilePath, string outputPath)
         {
-            WmaToMp3(File.OpenRead(wmafilePath), new FileStream(outputPath, FileMode.Create), null, 1);
+            WmaToMp3(wmafilePath, outputPath, null, 1);
         }
 
         public static void WmaToMp3(string wmafilePath, string outputPath, Mp3WriterConfig mp3Format)
         {
-            WmaToMp3(File.OpenRead(wmafilePath), new FileStream(outputPath, FileMode.Create), mp3Format, 1);
+            WmaToMp3(wmafilePath, outputPath, mp3Format, 1);
         }
 
-        public static void WmaToMp3(
-            string wmafilePath, string outputPath, Mp3WriterConfig mp3Format, int bufferMultiplier)
+        public static void WmaToMp3(string wmafilePath, string outputPath, Mp3WriterConfig mp3Format, int bufferMultiplier)
         {
-            WmaToMp3(File.OpenRead(wmafilePath),
-                new FileStream(outputPath, FileMode.Create),
-                mp3Format,
-                bufferMultiplier);
+            using(var inputStream = File.OpenRead(wmafilePath))
+            {
+                using(var outputStream = new FileStream(outputPath, FileMode.Create))
+                {
+                    WmaToMp3(inputStream, outputStream, mp3Format, bufferMultiplier);
+                }
+            }
         }
 
         public static void WmaToMp3(string wmafilePath, Stream outputStream)
         {
-            WmaToMp3(File.OpenRead(wmafilePath), outputStream, null, 1);
+            using(var inputStream = File.OpenRead(wmafilePath))
+            {
+                WmaToMp3(inputStream, outputStream, null, 1);
+            }
         }
 
         public static void WmaToMp3(string wmafilePath, Stream outputStream, Mp3WriterConfig mp3Format)
         {
-            WmaToMp3(File.OpenRead(wmafilePath), outputStream, mp3Format, 1);
+            using(var inputStream = File.OpenRead(wmafilePath))
+            {
+                WmaToMp3(inputStream, outputStream, mp3Format, 1);
+            }
         }
 
         public static void WmaToMp3(Stream wmafileStream, string outputPath)
         {
-            WmaToMp3(wmafileStream, new FileStream(outputPath, FileMode.Create), null, 1);
+            WmaToMp3(wmafileStream, outputPath, null, 1);
         }
 
         public static void WmaToMp3(Stream wmafileStream, string outputPath, Mp3WriterConfig mp3Format)
         {
-            WmaToMp3(wmafileStream, new FileStream(outputPath, FileMode.Create), mp3Format, 1);
+            WmaToMp3(wmafileStream, outputPath, mp3Format, 1);
         }
 
-        public static void WmaToMp3(
-            Stream wmafileStream, string outputPath, Mp3WriterConfig mp3Format, int bufferMultiplier)
+        public static void WmaToMp3(Stream wmafileStream, string outputPath, Mp3WriterConfig mp3Format, int bufferMultiplier)
         {
-            WmaToMp3(wmafileStream, new FileStream(outputPath, FileMode.Create), mp3Format, bufferMultiplier);
+            using(var outputStream = new FileStream(outputPath, FileMode.Create))
+            {
+                WmaToMp3(wmafileStream, outputStream, mp3Format, bufferMultiplier);
+            }
         }
 
         public static void WmaToMp3(Stream wmafileStream, Stream outputStream)
@@ -64,15 +73,14 @@ namespace yeti.conversions
             WmaToMp3(wmafileStream, outputStream, mp3Format, 1);
         }
 
-        public static void WmaToMp3(
-            Stream wmaInputStream, Stream outputStream, Mp3WriterConfig mp3Format, int bufferMultiplier)
+        public static void WmaToMp3(Stream wmaInputStream, Stream outputStream, Mp3WriterConfig mp3Format, int bufferMultiplier)
         {
             WmaToMp3Delegate convert = wmaStream =>
                                        {
                                            var writer = new Mp3Writer(outputStream,
                                                             mp3Format ?? new Mp3WriterConfig(wmaStream.Format, new BE_CONFIG(wmaStream.Format)));
                                            var buffer = new byte[writer.OptimalBufferSize*bufferMultiplier];
-                                           WriteToFile(writer, wmaStream, buffer);
+                                           WriteToStream(writer, wmaStream, buffer);
                                        };
 
             if (wmaInputStream is WmaStreamReader)
@@ -90,22 +98,31 @@ namespace yeti.conversions
 
         public static void WmaToMp3(string wmafilePath, string outputPath, uint bitRate)
         {
-            WmaToMp3(File.OpenRead(wmafilePath), new FileStream(outputPath, FileMode.Create), bitRate, 1);
+            WmaToMp3(wmafilePath, outputPath, bitRate, 1);
         }
 
         public static void WmaToMp3(string wmafilePath, Stream outputStream, uint bitRate)
         {
-            WmaToMp3(File.OpenRead(wmafilePath), outputStream, bitRate, 1);
+            using (var inputStream = File.OpenRead(wmafilePath))
+            {
+                WmaToMp3(inputStream, outputStream, bitRate, 1);
+            }
         }
 
         public static void WmaToMp3(string wmafilePath, string outputPath, uint bitRate, int bufferMultiplier)
         {
-            WmaToMp3(File.OpenRead(wmafilePath), new FileStream(outputPath, FileMode.Create), bitRate, 1);
+            using(var inputStream = File.OpenRead(wmafilePath))
+            {
+                WmaToMp3(inputStream, outputPath, bitRate, 1);
+            }
         }
 
         public static void WmaToMp3(Stream wmafileStream, string outputPath, uint bitRate)
         {
-            WmaToMp3(wmafileStream, new FileStream(outputPath, FileMode.Create), bitRate, 1);
+            using (var outputStream = new FileStream(outputPath, FileMode.Create))
+            {
+                WmaToMp3(wmafileStream, outputStream, bitRate, 1);
+            }
         }
 
         public static void WmaToMp3(Stream wmafileStream, Stream outputStream, uint bitRate)
@@ -113,21 +130,22 @@ namespace yeti.conversions
             WmaToMp3(wmafileStream, outputStream, bitRate, 1);
         }
 
-        public static void WmaToMp3(
-            Stream wmafileStream, string outputPath, uint bitRate, int bufferMultiplier)
+        public static void WmaToMp3(Stream wmafileStream, string outputPath, uint bitRate, int bufferMultiplier)
         {
-            WmaToMp3(wmafileStream, new FileStream(outputPath, FileMode.Create), bitRate, 1);
+            using (var outputStream = new FileStream(outputPath, FileMode.Create))
+            {
+                WmaToMp3(wmafileStream, outputStream, bitRate, 1);
+            }
         }
 
-        public static void WmaToMp3(
-            Stream wmaInputStream, Stream outputStream, uint bitRate, int bufferMultiplier)
+        public static void WmaToMp3(Stream wmaInputStream, Stream outputStream, uint bitRate, int bufferMultiplier)
         {
             using (var wmaStream = new WmaStreamReader(wmaInputStream))
             {
                 var writer = new Mp3Writer(outputStream,
-                    new Mp3WriterConfig(wmaStream.Format, new BE_CONFIG(wmaStream.Format, bitRate)));
+                    new Mp3WriterConfig(wmaStream.Format, bitRate));
                 var buffer = new byte[writer.OptimalBufferSize*bufferMultiplier];
-                WriteToFile(writer, wmaStream, buffer);
+                WriteToStream(writer, wmaStream, buffer);
             }
         }
 
@@ -164,7 +182,7 @@ namespace yeti.conversions
             {
                 var writer = new WaveWriter(outputStream, waveFormat ?? wmaStream.Format);
                 var buffer = new byte[writer.OptimalBufferSize*bufferMultiplier];
-                WriteToFile(writer, wmaStream, buffer);
+                WriteToStream(writer, wmaStream, buffer);
             }
         }
 
@@ -191,7 +209,7 @@ namespace yeti.conversions
             {
                 var writer = new WmaWriter(outputStream, wmaFormat);
                 var buffer = new byte[writer.OptimalBufferSize*bufferMultiplier];
-                WriteToFile(writer, wmaStream, buffer);
+                WriteToStream(writer, wmaStream, buffer);
             }
         }
     }

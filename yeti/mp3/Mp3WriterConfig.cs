@@ -52,6 +52,11 @@ namespace yeti.mp3
             m_BeConfig = beconfig;
         }
 
+        public Mp3WriterConfig(WaveFormat InFormat, uint bitRate)
+            : this(InFormat, new BE_CONFIG(InFormat, bitRate))
+        {
+        }
+
         public Mp3WriterConfig(WaveFormat InFormat)
             : this(InFormat, new BE_CONFIG(InFormat))
         {
@@ -62,7 +67,7 @@ namespace yeti.mp3
         {
         }
 
-        public override void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context)
+        public override void GetObjectData(SerializationInfo info, System.Runtime.Serialization.StreamingContext context)
         {
             base.GetObjectData(info, context);
             info.AddValue("BE_CONFIG", m_BeConfig, m_BeConfig.GetType());
