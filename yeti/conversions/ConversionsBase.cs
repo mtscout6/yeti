@@ -10,6 +10,7 @@ namespace yeti.conversions
             while ((read = inputStream.Read(buffer, 0, buffer.Length)) > 0)
             {
                 writer.Write(buffer, 0, read);
+                writer.Flush();
             }
         }
     }
