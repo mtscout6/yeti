@@ -11,12 +11,13 @@ namespace yeti.wma.internals
     /// managed heap could be exposed through the pointer returned by
     /// INSSBuffer methods.
     /// </summary>
-    internal class ManBuffer : INSSBuffer
+    internal class ManBuffer : INSSBuffer, IDisposable
     {
         private uint m_UsedLength;
         private uint m_MaxLength;
         private byte[] m_Buffer;
         private GCHandle handle;
+        private bool isDisposed;
 
         /// <summary>
         /// Create a buffer with specified size
@@ -28,9 +29,19 @@ namespace yeti.wma.internals
             m_MaxLength = m_UsedLength = size;
             handle = GCHandle.Alloc(m_Buffer, GCHandleType.Pinned);
         }
+
         ~ManBuffer()
         {
-            handle.Free();
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            if (!isDisposed)
+            {
+                isDisposed = true;
+                handle.Free();
+            }
         }
 
         /// <summary>

@@ -16,13 +16,11 @@ using System.Runtime.InteropServices;
 
 namespace yeti.wma.interfaces
 {
-
     [ComImport]
     [Guid("E1CD3524-03D7-11d2-9EED-006097D2D7CF")]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface INSSBuffer
     {
-
         void GetLength([Out] out uint pdwLength);
 
         void SetLength([In] uint dwLength);

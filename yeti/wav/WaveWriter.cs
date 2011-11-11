@@ -83,6 +83,11 @@ namespace yeti.wav
             m_WrittenBytes -= (WaveHeaderSize + 8);
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            Close();
+        }
+
         public override void Close()
         {
             if (!closed)

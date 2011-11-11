@@ -12,6 +12,7 @@
 //
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using yeti.wma.interfaces;
@@ -37,22 +38,22 @@ namespace yeti.wma
         /// <param name="output"><see cref="System.IO.Stream"/> Where resulting WMA string will be written</param>
         /// <param name="format">PCM format of input data received in <see cref="WmaWriter.Write"/> method</param>
         /// <param name="profile">IWMProfile that describe the resulting compressed stream</param>
-        /// <param name="MetadataAttributes">Array of <see cref="Yeti.WMFSdk.WM_Attr"/> structures describing the metadata information that will be in the result stream</param>
-        public WmaWriter(Stream output, WaveFormat format, IWMProfile profile, WM_Attr[] MetadataAttributes)
+        /// <param name="metadataAttributes">Array of <see cref="yeti.wma.structs.WM_Attr"/> structures describing the metadata information that will be in the result stream</param>
+        public WmaWriter(Stream output, WaveFormat format, IWMProfile profile, IEnumerable<WM_Attr> metadataAttributes)
             : base(output, format)
         {
             m_Writer = WM.CreateWriter();
-            IWMWriterAdvanced wa = (IWMWriterAdvanced)m_Writer;
+            var wa = (IWMWriterAdvanced)m_Writer;
             wa.AddSink((IWMWriterSink)this);
             m_Writer.SetProfile(profile);
             uint inputs;
             m_Writer.GetInputCount(out inputs);
             if (inputs == 1)
             {
-                IWMInputMediaProps InpProps;
+                IWMInputMediaProps inpProps;
                 Guid type;
-                m_Writer.GetInputProps(0, out InpProps);
-                InpProps.GetType(out type);
+                m_Writer.GetInputProps(0, out inpProps);
+                inpProps.GetType(out type);
                 if (type == MediaTypes.WMMEDIATYPE_Audio)
                 {
                     WM_MEDIA_TYPE mt;
@@ -69,17 +70,17 @@ namespace yeti.wma
                     try
                     {
                         mt.pbFormat = h.AddrOfPinnedObject();
-                        InpProps.SetMediaType(ref mt);
+                        inpProps.SetMediaType(ref mt);
                     }
                     finally
                     {
                         h.Free();
                     }
-                    m_Writer.SetInputProps(0, InpProps);
-                    if (MetadataAttributes != null)
+                    m_Writer.SetInputProps(0, inpProps);
+                    if (metadataAttributes != null)
                     {
-                        WMHeaderInfo info = new WMHeaderInfo((IWMHeaderInfo)m_Writer);
-                        foreach (WM_Attr attr in MetadataAttributes)
+                        var info = new WMHeaderInfo((IWMHeaderInfo)m_Writer);
+                        foreach (WM_Attr attr in metadataAttributes)
                         {
                             info.SetAttribute(attr);
                         }
@@ -123,34 +124,38 @@ namespace yeti.wma
         public void OnHeader([In, MarshalAs(UnmanagedType.Interface)] INSSBuffer pHeader)
         {
             byte[] buffer;
-            uint Length;
-            if (pHeader is ManBuffer)
+            uint length;
+            var manBuff = pHeader as ManBuffer;
+            if (manBuff != null)
             {
-                buffer = ((ManBuffer)pHeader).Buffer;
-                Length = ((ManBuffer)pHeader).UsedLength;
+                buffer = manBuff.Buffer;
+                length = manBuff.UsedLength;
+                manBuff.Dispose();
             }
             else
             {
-                NSSBuffer b = new NSSBuffer(pHeader);
-                Length = b.Length;
-                buffer = new byte[Length];
-                b.Read(buffer, 0, (int)Length);
+                using (var b = new NSSBuffer(pHeader))
+                {
+                    length = b.Length;
+                    buffer = new byte[length];
+                    b.Read(buffer, 0, (int)length);
+                }
             }
             if (!m_HeaderWrote)
             {
                 if (BaseStream.CanSeek)
                 {
                     m_HeaderPosition = BaseStream.Position;
-                    m_HeaderLength = Length;
+                    m_HeaderLength = length;
                 }
                 m_HeaderWrote = true;
-                base.Write(buffer, 0, (int)Length);
+                base.Write(buffer, 0, (int)length);
             }
-            else if (BaseStream.CanSeek && (Length == m_HeaderLength))
+            else if (BaseStream.CanSeek && (length == m_HeaderLength))
             {
                 long pos = BaseStream.Position;
                 BaseStream.Position = m_HeaderPosition;
-                BaseStream.Write(buffer, 0, (int)Length);
+                BaseStream.Write(buffer, 0, (int)length);
                 BaseStream.Position = pos;
             }
         }
@@ -169,20 +174,24 @@ namespace yeti.wma
         public void OnDataUnit([In, MarshalAs(UnmanagedType.Interface)] INSSBuffer pDataUnit)
         {
             byte[] buffer;
-            int Length;
-            if (pDataUnit is ManBuffer)
+            int length;
+            var manBuff = pDataUnit as ManBuffer;
+            if (manBuff != null)
             {
-                buffer = ((ManBuffer)pDataUnit).Buffer;
-                Length = (int)((ManBuffer)pDataUnit).UsedLength;
+                buffer = manBuff.Buffer;
+                length = (int)manBuff.UsedLength;
+                manBuff.Dispose();
             }
             else
             {
-                NSSBuffer b = new NSSBuffer(pDataUnit);
-                Length = (int)b.Length;
-                buffer = new byte[Length];
-                b.Read(buffer, 0, Length);
+                using (var b = new NSSBuffer(pDataUnit))
+                {
+                    length = (int)b.Length;
+                    buffer = new byte[length];
+                    b.Read(buffer, 0, length);
+                }
             }
-            base.Write(buffer, 0, Length);
+            base.Write(buffer, 0, length);
         }
 
         public void OnEndWriting()
@@ -191,6 +200,11 @@ namespace yeti.wma
 
         #endregion
 
+        protected override void Dispose(bool disposing)
+        {
+            Close();
+        }
+
         public override void Close()
         {
             try
@@ -198,8 +212,13 @@ namespace yeti.wma
                 if (m_Writer != null)
                 {
                     m_Writer.EndWriting();
-                    IWMWriterAdvanced wa = (IWMWriterAdvanced)m_Writer;
+                    var wa = (IWMWriterAdvanced)m_Writer;
                     wa.RemoveSink((IWMWriterSink)this);
+                    Marshal.ReleaseComObject(m_Writer);
+                    if (m_Profile != null)
+                    {
+                        Marshal.ReleaseComObject(m_Profile);
+                    }
                     m_Writer = null;
                     m_Profile = null;
                 }
@@ -216,7 +235,7 @@ namespace yeti.wma
         /// <summary>
         /// Return the optimal size of buffer in each write operations. Other value could be
         /// more optimal. The only requirement for buffer size is that it must be multiple
-        /// of PCM sample size <see cref="Yeti.WMFSdk.WmaWriterConfig.Format.nBlockAlign"/>
+        /// of PCM sample size <see cref="yeti.wma.WmaWriterConfig.Format.nBlockAlign"/>
         /// </summary>
         /// <returns>Size equivalent to 100 milliseconds.</returns>
         protected override int GetOptimalBufferSize()
@@ -236,18 +255,20 @@ namespace yeti.wma
         /// </summary>
         /// <param name="buffer">Byte array defining the buffer to write.</param>
         /// <param name="index">Index of first value to write</param>
-        /// <param name="count">NUmber of byte to write. Must be multiple of PCM sample size <see cref="Yeti.WMFSdk.WmaWriterConfig.Format.nBlockAlign"/></param>
+        /// <param name="count">NUmber of byte to write. Must be multiple of PCM sample size <see cref="yeti.wma.WmaWriterConfig.Format.nBlockAlign"/></param>
         public override void Write(byte[] buffer, int index, int count)
         {
             if ((count % m_InputDataFormat.nBlockAlign) == 0)
             {
-                INSSBuffer IBuff;
-                NSSBuffer NssBuff;
-                m_Writer.AllocateSample((uint)count, out IBuff);
-                NssBuff = new NSSBuffer(IBuff);
-                NssBuff.Write(buffer, index, count);
-                NssBuff.Length = (uint)count;
-                m_Writer.WriteSample(0, m_MsAudioTime * 10000, 0, IBuff);
+                INSSBuffer buff;
+                NSSBuffer nssBuff;
+                m_Writer.AllocateSample((uint)count, out buff);
+                using (nssBuff = new NSSBuffer(buff))
+                {
+                    nssBuff.Write(buffer, index, count);
+                    nssBuff.Length = (uint)count;
+                    m_Writer.WriteSample(0, m_MsAudioTime * 10000, 0, buff);
+                }
                 m_MsAudioTime += ((ulong)count * 1000) / (ulong)m_InputDataFormat.nAvgBytesPerSec;
             }
             else

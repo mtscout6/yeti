@@ -20,7 +20,7 @@ namespace yeti.wma.internals
     /// <summary>
     /// Helper class who encapsulates INSSBuffer buffers.
     /// </summary>
-    internal class NSSBuffer
+    internal class NSSBuffer : IDisposable
     {
         private INSSBuffer m_Buffer;
         private uint m_Length;
@@ -34,6 +34,13 @@ namespace yeti.wma.internals
         /// <param name="buff">INSSBuffer to wrap</param>
         public NSSBuffer(INSSBuffer buff)
         {
+            Reset(buff);
+        }
+
+        public void Reset(INSSBuffer buff)
+        {
+            ReleaseBuffer();
+            m_Position = 0;
             m_Buffer = buff;
             m_Buffer.GetBufferAndLength(out m_BufferPtr, out m_Length);
             m_Buffer.GetMaxLength(out m_MaxLength);
@@ -108,16 +115,13 @@ namespace yeti.wma.internals
         {
             if (m_Position < m_Length)
             {
-                IntPtr src = (IntPtr)(m_BufferPtr.ToInt32() + m_Position);
-                int ToCopy = Math.Min(count, (int)(this.Length - this.Position));
-                Marshal.Copy(src, buffer, offset, ToCopy);
-                m_Position += (uint)ToCopy;
-                return ToCopy;
+                var src = (IntPtr)(m_BufferPtr.ToInt32() + m_Position);
+                int toCopy = Math.Min(count, (int)(this.Length - this.Position));
+                Marshal.Copy(src, buffer, offset, toCopy);
+                m_Position += (uint)toCopy;
+                return toCopy;
             }
-            else
-            {
-                return 0;
-            }
+            return 0;
         }
 
         /// <summary>
@@ -141,9 +145,22 @@ namespace yeti.wma.internals
             {
                 throw new ArgumentOutOfRangeException("count");
             }
-            IntPtr dest = (IntPtr)(m_BufferPtr.ToInt32() + m_Position);
+            var dest = (IntPtr)(m_BufferPtr.ToInt32() + m_Position);
             Marshal.Copy(buffer, offset, dest, count);
             m_Position += (uint)count;
+        }
+
+        public void Dispose()
+        {
+            ReleaseBuffer();
+        }
+
+        private void ReleaseBuffer()
+        {
+            if (m_Buffer != null)
+            {
+                Marshal.ReleaseComObject(m_Buffer);
+            }
         }
     }
 }

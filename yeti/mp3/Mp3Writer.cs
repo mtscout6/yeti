@@ -33,7 +33,7 @@ namespace yeti.mp3
     /// The data received through the method write is assumed as PCM audio data. 
     /// This data is converted to MP3 format and written to the result stream. 
     /// <seealso cref="AudioWriter"/>
-    /// <seealso cref="Yeti.Mp3"/>
+    /// <seealso cref="yeti.mp3"/>
     /// </summary>
     public class Mp3Writer : AudioWriter, IMp3Writer
     {
@@ -49,39 +49,39 @@ namespace yeti.mp3
         /// <summary>
         /// Create a Mp3Writer with the default MP3 format
         /// </summary>
-        /// <param name="Output">Stream that will hold the MP3 resulting data</param>
-        /// <param name="InputDataFormat">PCM format of input data</param>
-        public Mp3Writer(Stream Output, WaveFormat InputDataFormat)
-            : this(Output, InputDataFormat, new BE_CONFIG(InputDataFormat))
+        /// <param name="output">Stream that will hold the MP3 resulting data</param>
+        /// <param name="inputDataFormat">PCM format of input data</param>
+        public Mp3Writer(Stream output, WaveFormat inputDataFormat)
+            : this(output, inputDataFormat, new BE_CONFIG(inputDataFormat))
         {
         }
 
         /// <summary>
         /// Create a Mp3Writer with specific MP3 format
         /// </summary>
-        /// <param name="Output">Stream that will hold the MP3 resulting data</param>
+        /// <param name="output">Stream that will hold the MP3 resulting data</param>
         /// <param name="cfg">Writer Config</param>
-        public Mp3Writer(Stream Output, Mp3WriterConfig cfg)
-            : this(Output, cfg.Format, cfg.Mp3Config)
+        public Mp3Writer(Stream output, Mp3WriterConfig cfg)
+            : this(output, cfg.Format, cfg.Mp3Config)
         {
         }
 
         /// <summary>
         /// Create a Mp3Writer with specific MP3 format
         /// </summary>
-        /// <param name="Output">Stream that will hold the MP3 resulting data</param>
-        /// <param name="InputDataFormat">PCM format of input data</param>
-        /// <param name="Mp3Config">Desired MP3 config</param>
-        public Mp3Writer(Stream Output, WaveFormat InputDataFormat, BE_CONFIG Mp3Config)
-            : base(Output, InputDataFormat)
+        /// <param name="output">Stream that will hold the MP3 resulting data</param>
+        /// <param name="inputDataFormat">PCM format of input data</param>
+        /// <param name="mp3Config">Desired MP3 config</param>
+        public Mp3Writer(Stream output, WaveFormat inputDataFormat, BE_CONFIG mp3Config)
+            : base(output, inputDataFormat)
         {
             try
             {
-                m_Mp3Config = Mp3Config;
-                uint LameResult = Lame_encDll.beInitStream(m_Mp3Config, ref m_InputSamples, ref m_OutBufferSize, ref m_hLameStream);
-                if (LameResult != Lame_encDll.BE_ERR_SUCCESSFUL)
+                m_Mp3Config = mp3Config;
+                uint lameResult = Lame_encDll.beInitStream(m_Mp3Config, ref m_InputSamples, ref m_OutBufferSize, ref m_hLameStream);
+                if (lameResult != Lame_encDll.BE_ERR_SUCCESSFUL)
                 {
-                    throw new ApplicationException(string.Format("Lame_encDll.beInitStream failed with the error code {0}", LameResult));
+                    throw new ApplicationException(string.Format("Lame_encDll.beInitStream failed with the error code {0}", lameResult));
                 }
                 m_InBuffer = new byte[m_InputSamples * 2]; //Input buffer is expected as short[]
                 m_OutBuffer = new byte[m_OutBufferSize];
@@ -109,29 +109,34 @@ namespace yeti.mp3
             return m_InBuffer.Length;
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            Close();
+        }
+
         public override void Close()
         {
             if (!closed)
             {
                 try
                 {
-                    uint EncodedSize = 0;
+                    uint encodedSize = 0;
                     if (m_InBufferPos > 0)
                     {
-                        if (Lame_encDll.EncodeChunk(m_hLameStream, m_InBuffer, 0, (uint)m_InBufferPos, m_OutBuffer, ref EncodedSize) == Lame_encDll.BE_ERR_SUCCESSFUL)
+                        if (Lame_encDll.EncodeChunk(m_hLameStream, m_InBuffer, 0, (uint)m_InBufferPos, m_OutBuffer, ref encodedSize) == Lame_encDll.BE_ERR_SUCCESSFUL)
                         {
-                            if (EncodedSize > 0)
+                            if (encodedSize > 0)
                             {
-                                base.Write(m_OutBuffer, 0, (int)EncodedSize);
+                                base.Write(m_OutBuffer, 0, (int)encodedSize);
                             }
                         }
                     }
-                    EncodedSize = 0;
-                    if (Lame_encDll.beDeinitStream(m_hLameStream, m_OutBuffer, ref EncodedSize) == Lame_encDll.BE_ERR_SUCCESSFUL)
+                    encodedSize = 0;
+                    if (Lame_encDll.beDeinitStream(m_hLameStream, m_OutBuffer, ref encodedSize) == Lame_encDll.BE_ERR_SUCCESSFUL)
                     {
-                        if (EncodedSize > 0)
+                        if (encodedSize > 0)
                         {
-                            base.Write(m_OutBuffer, 0, (int)EncodedSize);
+                            base.Write(m_OutBuffer, 0, (int)encodedSize);
                         }
                     }
                 }
@@ -155,31 +160,30 @@ namespace yeti.mp3
         /// <param name="count">Bytes to process. The optimal size, to avoid buffer copy, is a multiple of <see cref="AudioWriter.OptimalBufferSize"/></param>
         public override void Write(byte[] buffer, int index, int count)
         {
-            int ToCopy = 0;
-            uint EncodedSize = 0;
-            uint LameResult;
+            uint encodedSize = 0;
             while (count > 0)
             {
+                uint lameResult;
                 if (m_InBufferPos > 0)
                 {
-                    ToCopy = Math.Min(count, m_InBuffer.Length - m_InBufferPos);
-                    Buffer.BlockCopy(buffer, index, m_InBuffer, m_InBufferPos, ToCopy);
-                    m_InBufferPos += ToCopy;
-                    index += ToCopy;
-                    count -= ToCopy;
+                    int toCopy = Math.Min(count, m_InBuffer.Length - m_InBufferPos);
+                    Buffer.BlockCopy(buffer, index, m_InBuffer, m_InBufferPos, toCopy);
+                    m_InBufferPos += toCopy;
+                    index += toCopy;
+                    count -= toCopy;
                     if (m_InBufferPos >= m_InBuffer.Length)
                     {
                         m_InBufferPos = 0;
-                        if ((LameResult = Lame_encDll.EncodeChunk(m_hLameStream, m_InBuffer, m_OutBuffer, ref EncodedSize)) == Lame_encDll.BE_ERR_SUCCESSFUL)
+                        if ((lameResult = Lame_encDll.EncodeChunk(m_hLameStream, m_InBuffer, m_OutBuffer, ref encodedSize)) == Lame_encDll.BE_ERR_SUCCESSFUL)
                         {
-                            if (EncodedSize > 0)
+                            if (encodedSize > 0)
                             {
-                                base.Write(m_OutBuffer, 0, (int)EncodedSize);
+                                base.Write(m_OutBuffer, 0, (int)encodedSize);
                             }
                         }
                         else
                         {
-                            throw new ApplicationException(string.Format("Lame_encDll.EncodeChunk failed with the error code {0}", LameResult));
+                            throw new ApplicationException(string.Format("Lame_encDll.EncodeChunk failed with the error code {0}", lameResult));
                         }
                     }
                 }
@@ -187,16 +191,16 @@ namespace yeti.mp3
                 {
                     if (count >= m_InBuffer.Length)
                     {
-                        if ((LameResult = Lame_encDll.EncodeChunk(m_hLameStream, buffer, index, (uint)m_InBuffer.Length, m_OutBuffer, ref EncodedSize)) == Lame_encDll.BE_ERR_SUCCESSFUL)
+                        if ((lameResult = Lame_encDll.EncodeChunk(m_hLameStream, buffer, index, (uint)m_InBuffer.Length, m_OutBuffer, ref encodedSize)) == Lame_encDll.BE_ERR_SUCCESSFUL)
                         {
-                            if (EncodedSize > 0)
+                            if (encodedSize > 0)
                             {
-                                base.Write(m_OutBuffer, 0, (int)EncodedSize);
+                                base.Write(m_OutBuffer, 0, (int)encodedSize);
                             }
                         }
                         else
                         {
-                            throw new ApplicationException(string.Format("Lame_encDll.EncodeChunk failed with the error code {0}", LameResult));
+                            throw new ApplicationException(string.Format("Lame_encDll.EncodeChunk failed with the error code {0}", lameResult));
                         }
                         count -= m_InBuffer.Length;
                         index += m_InBuffer.Length;

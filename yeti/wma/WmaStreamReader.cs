@@ -58,10 +58,10 @@ namespace yeti.wma
                 {
                     m_Reader.Close();
                 }
-                catch
+                finally
                 {
+                    m_Reader = null;
                 }
-                m_Reader = null;
                 throw;
             }
         }
@@ -85,10 +85,10 @@ namespace yeti.wma
                 {
                     m_Reader.Close();
                 }
-                catch
+                finally
                 {
+                    m_Reader = null;
                 }
-                m_Reader = null;
                 throw;
             }
         }
@@ -207,7 +207,7 @@ namespace yeti.wma
         {
             get
             {
-                WMHeaderInfo head = new WMHeaderInfo(HeaderInfo);
+                var head = new WMHeaderInfo(HeaderInfo);
                 try
                 {
                     return head[AttrName].Value.ToString();
@@ -218,42 +218,39 @@ namespace yeti.wma
                     {
                         return null;
                     }
-                    else
-                    {
-                        throw (e);
-                    }
+                    throw;
                 }
             }
         }
 
         #region Private methods to interact with the WMF
 
-        private void Init(WaveFormat OutputFormat)
+        private void Init(WaveFormat outputFormat)
         {
             m_OutputNumber = GetAudioOutputNumber(m_Reader);
             if (m_OutputNumber == InvalidOuput)
             {
                 throw new ArgumentException("An audio stream was not found");
             }
-            int[] FormatIndexes = GetPCMOutputNumbers(m_Reader, (uint)m_OutputNumber);
-            if (FormatIndexes.Length == 0)
+            int[] formatIndexes = GetPCMOutputNumbers(m_Reader, (uint)m_OutputNumber);
+            if (formatIndexes.Length == 0)
             {
                 throw new ArgumentException("An audio stream was not found");
             }
-            if (OutputFormat != null)
+            if (outputFormat != null)
             {
                 m_OutputFormatNumber = -1;
-                for (int i = 0; i < FormatIndexes.Length; i++)
+                for (int i = 0; i < formatIndexes.Length; i++)
                 {
-                    WaveFormat fmt = GetOutputFormat(m_Reader, (uint)m_OutputNumber, (uint)FormatIndexes[i]);
-                    if ((fmt.wFormatTag == OutputFormat.wFormatTag) &&
-                      (fmt.nAvgBytesPerSec == OutputFormat.nAvgBytesPerSec) &&
-                      (fmt.nBlockAlign == OutputFormat.nBlockAlign) &&
-                      (fmt.nChannels == OutputFormat.nChannels) &&
-                      (fmt.nSamplesPerSec == OutputFormat.nSamplesPerSec) &&
-                      (fmt.wBitsPerSample == OutputFormat.wBitsPerSample))
+                    WaveFormat fmt = GetOutputFormat(m_Reader, (uint)m_OutputNumber, (uint)formatIndexes[i]);
+                    if ((fmt.wFormatTag == outputFormat.wFormatTag) &&
+                      (fmt.nAvgBytesPerSec == outputFormat.nAvgBytesPerSec) &&
+                      (fmt.nBlockAlign == outputFormat.nBlockAlign) &&
+                      (fmt.nChannels == outputFormat.nChannels) &&
+                      (fmt.nSamplesPerSec == outputFormat.nSamplesPerSec) &&
+                      (fmt.wBitsPerSample == outputFormat.wBitsPerSample))
                     {
-                        m_OutputFormatNumber = FormatIndexes[i];
+                        m_OutputFormatNumber = formatIndexes[i];
                         m_OutputFormat = fmt;
                         break;
                     }
@@ -265,51 +262,50 @@ namespace yeti.wma
             }
             else
             {
-                m_OutputFormatNumber = FormatIndexes[0];
-                m_OutputFormat = GetOutputFormat(m_Reader, (uint)m_OutputNumber, (uint)FormatIndexes[0]);
+                m_OutputFormatNumber = formatIndexes[0];
+                m_OutputFormat = GetOutputFormat(m_Reader, (uint)m_OutputNumber, (uint)formatIndexes[0]);
             }
-            uint OutputCtns = 0;
-            m_Reader.GetOutputCount(out OutputCtns);
-            ushort[] StreamNumbers = new ushort[OutputCtns];
-            WMT_STREAM_SELECTION[] StreamSelections = new WMT_STREAM_SELECTION[OutputCtns];
-            for (uint i = 0; i < OutputCtns; i++)
+            uint outputCtns = 0;
+            m_Reader.GetOutputCount(out outputCtns);
+            var streamNumbers = new ushort[outputCtns];
+            var streamSelections = new WMT_STREAM_SELECTION[outputCtns];
+            for (uint i = 0; i < outputCtns; i++)
             {
-                m_Reader.GetStreamNumberForOutput(i, out StreamNumbers[i]);
+                m_Reader.GetStreamNumberForOutput(i, out streamNumbers[i]);
                 if (i == m_OutputNumber)
                 {
-                    StreamSelections[i] = WMT_STREAM_SELECTION.WMT_ON;
-                    m_OuputStream = StreamNumbers[i];
+                    streamSelections[i] = WMT_STREAM_SELECTION.WMT_ON;
+                    m_OuputStream = streamNumbers[i];
                     m_Reader.SetReadStreamSamples(m_OuputStream, false);
                 }
                 else
                 {
-                    StreamSelections[i] = WMT_STREAM_SELECTION.WMT_OFF;
+                    streamSelections[i] = WMT_STREAM_SELECTION.WMT_OFF;
                 }
             }
-            m_Reader.SetStreamsSelected((ushort)OutputCtns, StreamNumbers, StreamSelections);
-            IWMOutputMediaProps Props = null;
-            m_Reader.GetOutputFormat((uint)m_OutputNumber, (uint)m_OutputFormatNumber, out Props);
-            m_Reader.SetOutputProps((uint)m_OutputNumber, Props);
+            m_Reader.SetStreamsSelected((ushort)outputCtns, streamNumbers, streamSelections);
+            IWMOutputMediaProps props = null;
+            m_Reader.GetOutputFormat((uint)m_OutputNumber, (uint)m_OutputFormatNumber, out props);
+            m_Reader.SetOutputProps((uint)m_OutputNumber, props);
 
-            uint Size = 0;
-            Props.GetMediaType(IntPtr.Zero, ref Size);
-            IntPtr buffer = Marshal.AllocCoTaskMem((int)Size);
+            uint size = 0;
+            props.GetMediaType(IntPtr.Zero, ref size);
+            IntPtr buffer = Marshal.AllocCoTaskMem((int)size);
             try
             {
-                WM_MEDIA_TYPE mt;
-                Props.GetMediaType(buffer, ref Size);
-                mt = (WM_MEDIA_TYPE)Marshal.PtrToStructure(buffer, typeof(WM_MEDIA_TYPE));
+                props.GetMediaType(buffer, ref size);
+                var mt = (WM_MEDIA_TYPE)Marshal.PtrToStructure(buffer, typeof(WM_MEDIA_TYPE));
                 m_SampleSize = mt.lSampleSize;
             }
             finally
             {
                 Marshal.FreeCoTaskMem(buffer);
-                Props = null;
+                props = null;
             }
 
             m_Seekable = false;
             m_Length = -1;
-            WMHeaderInfo head = new WMHeaderInfo(HeaderInfo);
+            var head = new WMHeaderInfo(HeaderInfo);
             try
             {
                 m_Seekable = (bool)head[WM.g_wszWMSeekable];
@@ -319,7 +315,7 @@ namespace yeti.wma
             {
                 if (e.ErrorCode != WM.ASF_E_NOTFOUND)
                 {
-                    throw (e);
+                    throw;
                 }
             }
 
@@ -328,14 +324,14 @@ namespace yeti.wma
         private static uint GetAudioOutputNumber(IWMSyncReader Reader)
         {
             uint res = InvalidOuput;
-            uint OutCounts = 0;
-            Reader.GetOutputCount(out OutCounts);
-            for (uint i = 0; i < OutCounts; i++)
+            uint outCounts = 0;
+            Reader.GetOutputCount(out outCounts);
+            for (uint i = 0; i < outCounts; i++)
             {
-                IWMOutputMediaProps Props = null;
-                Reader.GetOutputProps(i, out Props);
+                IWMOutputMediaProps props = null;
+                Reader.GetOutputProps(i, out props);
                 Guid mt;
-                Props.GetType(out mt);
+                props.GetType(out mt);
                 if (mt == MediaTypes.WMMEDIATYPE_Audio)
                 {
                     res = i;
@@ -349,28 +345,27 @@ namespace yeti.wma
 
         private static int[] GetPCMOutputNumbers(IWMSyncReader Reader, uint OutputNumber)
         {
-            ArrayList result = new ArrayList();
-            uint FormatCount = 0;
-            Reader.GetOutputFormatCount(OutputNumber, out FormatCount);
-            int BufferSize = Marshal.SizeOf(typeof(WM_MEDIA_TYPE)) + Marshal.SizeOf(typeof(WaveFormat));
-            IntPtr buffer = Marshal.AllocCoTaskMem(BufferSize);
+            var result = new ArrayList();
+            uint formatCount = 0;
+            Reader.GetOutputFormatCount(OutputNumber, out formatCount);
+            int bufferSize = Marshal.SizeOf(typeof(WM_MEDIA_TYPE)) + Marshal.SizeOf(typeof(WaveFormat));
+            IntPtr buffer = Marshal.AllocCoTaskMem(bufferSize);
             try
             {
-                for (int i = 0; i < FormatCount; i++)
+                for (int i = 0; i < formatCount; i++)
                 {
-                    IWMOutputMediaProps Props = null;
-                    uint Size = 0;
-                    WM_MEDIA_TYPE mt;
-                    Reader.GetOutputFormat(OutputNumber, (uint)i, out Props);
-                    Props.GetMediaType(IntPtr.Zero, ref Size);
-                    if ((int)Size > BufferSize)
+                    IWMOutputMediaProps props = null;
+                    uint size = 0;
+                    Reader.GetOutputFormat(OutputNumber, (uint)i, out props);
+                    props.GetMediaType(IntPtr.Zero, ref size);
+                    if ((int)size > bufferSize)
                     {
-                        BufferSize = (int)Size;
+                        bufferSize = (int)size;
                         Marshal.FreeCoTaskMem(buffer);
-                        buffer = Marshal.AllocCoTaskMem(BufferSize);
+                        buffer = Marshal.AllocCoTaskMem(bufferSize);
                     }
-                    Props.GetMediaType(buffer, ref Size);
-                    mt = (WM_MEDIA_TYPE)Marshal.PtrToStructure(buffer, typeof(WM_MEDIA_TYPE));
+                    props.GetMediaType(buffer, ref size);
+                    var mt = (WM_MEDIA_TYPE)Marshal.PtrToStructure(buffer, typeof(WM_MEDIA_TYPE));
                     if ((mt.majortype == MediaTypes.WMMEDIATYPE_Audio) &&
                          (mt.subtype == MediaTypes.WMMEDIASUBTYPE_PCM) &&
                          (mt.formattype == MediaTypes.WMFORMAT_WaveFormatEx) &&
@@ -389,17 +384,16 @@ namespace yeti.wma
 
         private static WaveFormat GetOutputFormat(IWMSyncReader Reader, uint OutputNumber, uint FormatNumber)
         {
-            IWMOutputMediaProps Props = null;
-            uint Size = 0;
-            WM_MEDIA_TYPE mt;
+            IWMOutputMediaProps props = null;
+            uint size = 0;
             WaveFormat fmt = null;
-            Reader.GetOutputFormat(OutputNumber, FormatNumber, out Props);
-            Props.GetMediaType(IntPtr.Zero, ref Size);
-            IntPtr buffer = Marshal.AllocCoTaskMem(Math.Max((int)Size, Marshal.SizeOf(typeof(WM_MEDIA_TYPE)) + Marshal.SizeOf(typeof(WaveFormat))));
+            Reader.GetOutputFormat(OutputNumber, FormatNumber, out props);
+            props.GetMediaType(IntPtr.Zero, ref size);
+            IntPtr buffer = Marshal.AllocCoTaskMem(Math.Max((int)size, Marshal.SizeOf(typeof(WM_MEDIA_TYPE)) + Marshal.SizeOf(typeof(WaveFormat))));
             try
             {
-                Props.GetMediaType(buffer, ref Size);
-                mt = (WM_MEDIA_TYPE)Marshal.PtrToStructure(buffer, typeof(WM_MEDIA_TYPE));
+                props.GetMediaType(buffer, ref size);
+                var mt = (WM_MEDIA_TYPE)Marshal.PtrToStructure(buffer, typeof(WM_MEDIA_TYPE));
                 if ((mt.majortype == MediaTypes.WMMEDIATYPE_Audio) &&
                      (mt.subtype == MediaTypes.WMMEDIASUBTYPE_PCM) &&
                      (mt.formattype == MediaTypes.WMFORMAT_WaveFormatEx) &&
@@ -427,6 +421,7 @@ namespace yeti.wma
             if (m_Reader != null)
             {
                 m_Reader.Close();
+                Marshal.ReleaseComObject(m_Reader);
                 m_Reader = null;
             }
             base.Close();
@@ -453,12 +448,12 @@ namespace yeti.wma
                 while (read < count)
                 {
                     INSSBuffer sample = null;
-                    ulong SampleTime = 0;
-                    ulong Duration = 0;
-                    uint Flags = 0;
                     try
                     {
-                        m_Reader.GetNextSample(m_OuputStream, out sample, out SampleTime, out Duration, out Flags, out m_OutputNumber, out m_OuputStream);
+                        uint flags = 0;
+                        ulong duration = 0;
+                        ulong sampleTime = 0;
+                        m_Reader.GetNextSample(m_OuputStream, out sample, out sampleTime, out duration, out flags, out m_OutputNumber, out m_OuputStream);
                     }
                     catch (COMException e)
                     {
@@ -484,20 +479,26 @@ namespace yeti.wma
                             throw (e);
                         }
                     }
-                    m_BufferReader = new NSSBuffer(sample);
+
+                    if (m_BufferReader != null)
+                    {
+                        m_BufferReader.Reset(sample);
+                    }
+                    else
+                    {
+                        m_BufferReader = new NSSBuffer(sample);
+                    }
                     read += m_BufferReader.Read(buffer, offset + read, count - read);
                 }
                 if ((m_BufferReader != null) && (m_BufferReader.Position >= m_BufferReader.Length))
                 {
+                    m_BufferReader.Dispose();
                     m_BufferReader = null;
                 }
                 m_Position += read;
                 return read;
             }
-            else
-            {
-                throw new ObjectDisposedException(this.ToString());
-            }
+            throw new ObjectDisposedException(this.ToString());
         }
 
         public override void Write(byte[] buffer, int offset, int count)
@@ -530,16 +531,17 @@ namespace yeti.wma
                 {
                     throw new ArgumentException(string.Format("Offset must be aligned by a value of SeekAlign ({0})", SeekAlign), "offset");
                 }
-                ulong SampleTime = BytePosition2SampleTime(offset);
-                m_Reader.SetRange(SampleTime, 0);
+                ulong sampleTime = BytePosition2SampleTime(offset);
+                m_Reader.SetRange(sampleTime, 0);
                 m_Position = offset;
+                if (m_BufferReader != null)
+                {
+                    Marshal.ReleaseComObject(m_BufferReader.Buffer);
+                }
                 m_BufferReader = null;
                 return offset;
             }
-            else
-            {
-                throw new NotSupportedException();
-            }
+            throw new NotSupportedException();
         }
 
         public override void Flush()
@@ -559,10 +561,7 @@ namespace yeti.wma
                 {
                     return true;
                 }
-                else
-                {
-                    throw new ObjectDisposedException(this.ToString());
-                }
+                throw new ObjectDisposedException(this.ToString());
             }
         }
 
@@ -574,10 +573,7 @@ namespace yeti.wma
                 {
                     return m_Seekable && (m_Length > 0);
                 }
-                else
-                {
-                    throw new ObjectDisposedException(this.ToString());
-                }
+                throw new ObjectDisposedException(this.ToString());
             }
         }
 
@@ -596,21 +592,15 @@ namespace yeti.wma
                     {
                         return m_Length;
                     }
-                    else
-                    {
-                        throw new NotSupportedException();
-                    }
+                    throw new NotSupportedException();
                 }
-                else
-                {
-                    throw new ObjectDisposedException(this.ToString());
-                }
+                throw new ObjectDisposedException(this.ToString());
             }
         }
 
         public TimeSpan Duration
         {
-            get { return TimeSpan.FromSeconds(Length / Format.nAvgBytesPerSec); }
+            get { return TimeSpan.FromSeconds((Length * 1.0) / Format.nAvgBytesPerSec); }
         }
 
         public override long Position
@@ -621,10 +611,7 @@ namespace yeti.wma
                 {
                     return m_Position;
                 }
-                else
-                {
-                    throw new ObjectDisposedException(this.ToString());
-                }
+                throw new ObjectDisposedException(this.ToString());
             }
             set
             {
@@ -634,7 +621,7 @@ namespace yeti.wma
         #endregion
 
         #region IDisposable Members
-        private void Dispose(bool disposing)
+        private new void Dispose(bool disposing)
         {
             if (disposing)
             {
@@ -642,7 +629,7 @@ namespace yeti.wma
             }
         }
 
-        public void Dispose()
+        public new void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);

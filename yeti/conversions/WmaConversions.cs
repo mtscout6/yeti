@@ -21,11 +21,9 @@ namespace yeti.conversions
         public static void WmaToMp3(string wmafilePath, string outputPath, Mp3WriterConfig mp3Format, int bufferMultiplier)
         {
             using(var inputStream = File.OpenRead(wmafilePath))
+            using(var outputStream = new FileStream(outputPath, FileMode.Create))
             {
-                using(var outputStream = new FileStream(outputPath, FileMode.Create))
-                {
-                    WmaToMp3(inputStream, outputStream, mp3Format, bufferMultiplier);
-                }
+                WmaToMp3(inputStream, outputStream, mp3Format, bufferMultiplier);
             }
         }
 
