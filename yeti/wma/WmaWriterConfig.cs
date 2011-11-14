@@ -48,7 +48,7 @@ namespace yeti.wma
         public WmaWriterConfig(WaveFormat format, IWMProfile profile)
             : base(format)
         {
-            WMProfile prf = new WMProfile(profile);
+            var prf = new WMProfile(profile);
             m_ProfileData = prf.ProfileData;
         }
 

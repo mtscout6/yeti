@@ -215,10 +215,6 @@ namespace yeti.wma
                     var wa = (IWMWriterAdvanced)m_Writer;
                     wa.RemoveSink((IWMWriterSink)this);
                     Marshal.ReleaseComObject(m_Writer);
-                    if (m_Profile != null)
-                    {
-                        Marshal.ReleaseComObject(m_Profile);
-                    }
                     m_Writer = null;
                     m_Profile = null;
                 }

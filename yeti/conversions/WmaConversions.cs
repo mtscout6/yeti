@@ -81,8 +81,11 @@ namespace yeti.conversions
                                            WriteToStream(writer, wmaStream, buffer);
                                        };
 
-            if (wmaInputStream is WmaStreamReader)
-                convert((WmaStreamReader)wmaInputStream);
+            var tempStream = wmaInputStream as WmaStreamReader;
+            if (tempStream != null)
+            {
+                convert(tempStream);
+            }
             else
             {
                 using (var wmaStream = new WmaStreamReader(wmaInputStream))
@@ -138,12 +141,24 @@ namespace yeti.conversions
 
         public static void WmaToMp3(Stream wmaInputStream, Stream outputStream, uint bitRate, int bufferMultiplier)
         {
-            using (var wmaStream = new WmaStreamReader(wmaInputStream))
+            WmaToMp3Delegate convert = wmaStream =>
             {
                 var writer = new Mp3Writer(outputStream,
                     new Mp3WriterConfig(wmaStream.Format, bitRate));
-                var buffer = new byte[writer.OptimalBufferSize*bufferMultiplier];
+                var buffer = new byte[writer.OptimalBufferSize * bufferMultiplier];
                 WriteToStream(writer, wmaStream, buffer);
+            };
+            var tempStream = wmaInputStream as WmaStreamReader;
+            if (tempStream != null)
+            {
+                convert(tempStream);
+            }
+            else
+            {
+                using (var wmaStream = new WmaStreamReader(wmaInputStream))
+                {
+                    convert(wmaStream);
+                }
             }
         }
 
