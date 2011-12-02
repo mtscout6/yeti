@@ -98,6 +98,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AudioWriter.cs" />
+    <Compile Include="CPU.cs" />
+    <Compile Include="mp3\configuration\Lame64.cs" />
+    <Compile Include="mp3\configuration\Lame86.cs" />
     <Compile Include="mp3\interfaces\IMp3Writer.cs" />
     <Compile Include="wav\IWaveStream.cs" />
     <Compile Include="wma\internals\ComStreamWrapper.cs" />
@@ -106,7 +109,7 @@
     <Compile Include="mp3\configuration\BE_CONFIG.cs" />
     <Compile Include="mp3\configuration\BE_VERSION.cs" />
     <Compile Include="mp3\configuration\Format.cs" />
-    <Compile Include="mp3\configuration\Lame_encDll.cs" />
+    <Compile Include="mp3\configuration\LameEnc.cs" />
     <Compile Include="mp3\enums\LAME_QUALITY_PRESET.cs" />
     <Compile Include="mp3\enums\MpegMode.cs" />
     <Compile Include="mp3\enums\VBRMETHOD.cs" />
@@ -212,6 +215,16 @@
     <Compile Include="wma\WmaWriterConfig.cs" />
     <Compile Include="wma\WMProfile.cs" />
     <Compile Include="wma\WMStreamConfig.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\Lib\lame_enc_64.dll">
+      <Link>lame_enc_64.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Lib\lame_enc_86.dll">
+      <Link>lame_enc_86.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

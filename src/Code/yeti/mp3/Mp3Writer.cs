@@ -78,8 +78,8 @@ namespace yeti.mp3
             try
             {
                 m_Mp3Config = mp3Config;
-                uint lameResult = Lame_encDll.beInitStream(m_Mp3Config, ref m_InputSamples, ref m_OutBufferSize, ref m_hLameStream);
-                if (lameResult != Lame_encDll.BE_ERR_SUCCESSFUL)
+                uint lameResult = LameEnc.beInitStream(m_Mp3Config, ref m_InputSamples, ref m_OutBufferSize, ref m_hLameStream);
+                if (lameResult != LameEnc.BE_ERR_SUCCESSFUL)
                 {
                     throw new ApplicationException(string.Format("Lame_encDll.beInitStream failed with the error code {0}", lameResult));
                 }
@@ -123,7 +123,7 @@ namespace yeti.mp3
                     uint encodedSize = 0;
                     if (m_InBufferPos > 0)
                     {
-                        if (Lame_encDll.EncodeChunk(m_hLameStream, m_InBuffer, 0, (uint)m_InBufferPos, m_OutBuffer, ref encodedSize) == Lame_encDll.BE_ERR_SUCCESSFUL)
+                        if (LameEnc.EncodeChunk(m_hLameStream, m_InBuffer, 0, (uint)m_InBufferPos, m_OutBuffer, ref encodedSize) == LameEnc.BE_ERR_SUCCESSFUL)
                         {
                             if (encodedSize > 0)
                             {
@@ -132,7 +132,7 @@ namespace yeti.mp3
                         }
                     }
                     encodedSize = 0;
-                    if (Lame_encDll.beDeinitStream(m_hLameStream, m_OutBuffer, ref encodedSize) == Lame_encDll.BE_ERR_SUCCESSFUL)
+                    if (LameEnc.beDeinitStream(m_hLameStream, m_OutBuffer, ref encodedSize) == LameEnc.BE_ERR_SUCCESSFUL)
                     {
                         if (encodedSize > 0)
                         {
@@ -142,7 +142,7 @@ namespace yeti.mp3
                 }
                 finally
                 {
-                    Lame_encDll.beCloseStream(m_hLameStream);
+                    LameEnc.beCloseStream(m_hLameStream);
                 }
             }
             closed = true;
@@ -174,7 +174,7 @@ namespace yeti.mp3
                     if (m_InBufferPos >= m_InBuffer.Length)
                     {
                         m_InBufferPos = 0;
-                        if ((lameResult = Lame_encDll.EncodeChunk(m_hLameStream, m_InBuffer, m_OutBuffer, ref encodedSize)) == Lame_encDll.BE_ERR_SUCCESSFUL)
+                        if ((lameResult = LameEnc.EncodeChunk(m_hLameStream, m_InBuffer, m_OutBuffer, ref encodedSize)) == LameEnc.BE_ERR_SUCCESSFUL)
                         {
                             if (encodedSize > 0)
                             {
@@ -191,7 +191,7 @@ namespace yeti.mp3
                 {
                     if (count >= m_InBuffer.Length)
                     {
-                        if ((lameResult = Lame_encDll.EncodeChunk(m_hLameStream, buffer, index, (uint)m_InBuffer.Length, m_OutBuffer, ref encodedSize)) == Lame_encDll.BE_ERR_SUCCESSFUL)
+                        if ((lameResult = LameEnc.EncodeChunk(m_hLameStream, buffer, index, (uint)m_InBuffer.Length, m_OutBuffer, ref encodedSize)) == LameEnc.BE_ERR_SUCCESSFUL)
                         {
                             if (encodedSize > 0)
                             {

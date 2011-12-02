@@ -115,11 +115,15 @@ namespace yeti.wma.internals
         {
             if (_position < _length)
             {
-#if x86
-                var src = (IntPtr)(_bufferPtr.ToInt32() + _position);
-#else
-                var src = (IntPtr)(_bufferPtr.ToInt64() + _position);
-#endif
+                IntPtr src;
+                if (CPU.Is32Bit)
+                {
+                    src = (IntPtr)(_bufferPtr.ToInt32() + _position);
+                }
+                else
+                {
+                    src = (IntPtr)(_bufferPtr.ToInt64() + _position);
+                }
                 var toCopy = Math.Min(count, (int)(Length - Position));
                 Marshal.Copy(src, buffer, offset, toCopy);
                 _position += (uint)toCopy;
@@ -149,11 +153,17 @@ namespace yeti.wma.internals
             {
                 throw new ArgumentOutOfRangeException("count");
             }
-#if x86
-            var dest = (IntPtr)(_bufferPtr.ToInt32() + _position);
-#else
-            var dest = (IntPtr)(_bufferPtr.ToInt64() + _position);
-#endif
+
+            IntPtr dest;
+            if (CPU.Is32Bit)
+            {
+                dest = (IntPtr)(_bufferPtr.ToInt32() + _position);
+            }
+            else
+            {
+                dest = (IntPtr)(_bufferPtr.ToInt64() + _position);
+            }
+
             Marshal.Copy(buffer, offset, dest, count);
             _position += (uint)count;
         }

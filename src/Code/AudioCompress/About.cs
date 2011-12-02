@@ -81,7 +81,7 @@ namespace AudioCompress
         private void About_Load(object sender, EventArgs e)
         {
             var ver = new BE_VERSION();
-            Lame_encDll.beVersion(ver);
+            LameEnc.beVersion(ver);
             labelDllVer.Text = string.Format("{0}.{1}", ver.byDLLMajorVersion, ver.byDLLMinorVersion);
             labelEngVer.Text = string.Format("{0}.{1}", ver.byMajorVersion, ver.byMinorVersion);
             var date = new DateTime(ver.wYear, ver.byMonth, ver.byDay);

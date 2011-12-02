@@ -6,7 +6,7 @@ namespace yeti.mp3.configuration
     /// <summary>
     /// Lame_enc DLL functions
     /// </summary>
-    public class Lame_encDll
+    public class LameEnc
     {
         //Error codes
         public const uint BE_ERR_SUCCESSFUL = 0;
@@ -23,8 +23,13 @@ namespace yeti.mp3.configuration
         /// <param name="dwBufferSize">Receives the minimun number of bytes that must have the output(result) buffer</param>
         /// <param name="phbeStream">Receives the stream handle on return</param>
         /// <returns>On success: BE_ERR_SUCCESSFUL</returns>
-        [DllImport("Lame_enc.dll")]
-        public static extern uint beInitStream(BE_CONFIG pbeConfig, ref uint dwSamples, ref uint dwBufferSize, ref uint phbeStream);
+        public static uint beInitStream(BE_CONFIG pbeConfig, ref uint dwSamples, ref uint dwBufferSize, ref uint phbeStream)
+        {
+            return CPU.Is32Bit 
+                ? Lame86.beInitStream(pbeConfig, ref dwSamples, ref dwBufferSize, ref phbeStream) 
+                : Lame64.beInitStream(pbeConfig, ref dwSamples, ref dwBufferSize, ref phbeStream);
+        }
+
         /// <summary>
         /// Encodes a chunk of samples. Please note that if you have set the output to 
         /// generate mono MP3 files you must feed beEncodeChunk() with mono samples
@@ -41,8 +46,13 @@ namespace yeti.mp3.configuration
         /// <param name="pdwOutput">Returns the number of bytes of encoded data written. 
         /// The amount of data written might vary from chunk to chunk</param>
         /// <returns>On success: BE_ERR_SUCCESSFUL</returns>
-        [DllImport("Lame_enc.dll")]
-        public static extern uint beEncodeChunk(uint hbeStream, uint nSamples, short[] pInSamples, [In, Out] byte[] pOutput, ref uint pdwOutput);
+        public static uint beEncodeChunk(uint hbeStream, uint nSamples, short[] pInSamples, [In, Out] byte[] pOutput, ref uint pdwOutput)
+        {
+            return CPU.Is32Bit
+                ? Lame86.beEncodeChunk(hbeStream, nSamples, pInSamples, pOutput, ref pdwOutput)
+                : Lame64.beEncodeChunk(hbeStream, nSamples, pInSamples, pOutput, ref pdwOutput);
+        }
+
         /// <summary>
         /// Encodes a chunk of samples. Please note that if you have set the output to 
         /// generate mono MP3 files you must feed beEncodeChunk() with mono samples
@@ -60,8 +70,13 @@ namespace yeti.mp3.configuration
         /// <param name="pdwOutput">Returns the number of bytes of encoded data written. 
         /// The amount of data written might vary from chunk to chunk</param>
         /// <returns>On success: BE_ERR_SUCCESSFUL</returns>
-        [DllImport("Lame_enc.dll")]
-        protected static extern uint beEncodeChunk(uint hbeStream, uint nSamples, IntPtr pSamples, [In, Out] byte[] pOutput, ref uint pdwOutput);
+        protected static uint beEncodeChunk(uint hbeStream, uint nSamples, IntPtr pSamples, [In, Out] byte[] pOutput, ref uint pdwOutput)
+        {
+            return CPU.Is32Bit
+                ? Lame86.beEncodeChunk(hbeStream, nSamples, pSamples, pOutput, ref pdwOutput)
+                : Lame64.beEncodeChunk(hbeStream, nSamples, pSamples, pOutput, ref pdwOutput);
+        }
+
         /// <summary>
         /// Encodes a chunk of samples. Samples are contained in a byte array
         /// </summary>
@@ -80,11 +95,15 @@ namespace yeti.mp3.configuration
             GCHandle handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
             try
             {
-#if x86
-                var ptr = (IntPtr)(handle.AddrOfPinnedObject().ToInt32() + index);
-#else
-                var ptr = (IntPtr)(handle.AddrOfPinnedObject().ToInt64() + index);
-#endif
+                IntPtr ptr;
+                if(CPU.Is32Bit)
+                {
+                    ptr = (IntPtr)(handle.AddrOfPinnedObject().ToInt32() + index);
+                }
+                else
+                {
+                    ptr = (IntPtr)(handle.AddrOfPinnedObject().ToInt64() + index);
+                }
                 res = beEncodeChunk(hbeStream, nBytes / 2/*Samples*/, ptr, pOutput, ref pdwOutput);
             }
             finally
@@ -118,16 +137,26 @@ namespace yeti.mp3.configuration
         /// at least of the minimum size returned by beInitStream().</param>
         /// <param name="pdwOutput">Returns number of bytes of encoded data written.</param>
         /// <returns>On success: BE_ERR_SUCCESSFUL</returns>
-        [DllImport("Lame_enc.dll")]
-        public static extern uint beDeinitStream(uint hbeStream, [In, Out] byte[] pOutput, ref uint pdwOutput);
+        public static uint beDeinitStream(uint hbeStream, [In, Out] byte[] pOutput, ref uint pdwOutput)
+        {
+            return CPU.Is32Bit
+                ? Lame86.beDeinitStream(hbeStream, pOutput, ref pdwOutput)
+                : Lame64.beDeinitStream(hbeStream, pOutput, ref pdwOutput);
+        }
+
         /// <summary>
         /// Last function to be called when finished encoding a stream. 
         /// Should unlike beDeinitStream() also be called if the encoding is canceled.
         /// </summary>
         /// <param name="hbeStream">Handle of the stream.</param>
         /// <returns>On success: BE_ERR_SUCCESSFUL</returns>
-        [DllImport("Lame_enc.dll")]
-        public static extern uint beCloseStream(uint hbeStream);
+        public static uint beCloseStream(uint hbeStream)
+        {
+            return CPU.Is32Bit
+                ? Lame86.beCloseStream(hbeStream)
+                : Lame64.beCloseStream(hbeStream);
+        }
+
         /// <summary>
         /// Returns information like version numbers (both of the DLL and encoding engine), 
         /// release date and URL for lame_enc's homepage. 
@@ -136,15 +165,49 @@ namespace yeti.mp3.configuration
         /// </summary>
         /// <param name="pbeVersion"Where version number, release date and URL for homepage 
         /// is returned.</param>
-        [DllImport("Lame_enc.dll")]
-        public static extern void beVersion([Out] BE_VERSION pbeVersion);
-        [DllImport("Lame_enc.dll", CharSet = CharSet.Ansi)]
-        public static extern void beWriteVBRHeader(string pszMP3FileName);
-        [DllImport("Lame_enc.dll")]
-        public static extern uint beEncodeChunkFloatS16NI(uint hbeStream, uint nSamples, [In]float[] buffer_l, [In]float[] buffer_r, [In, Out]byte[] pOutput, ref uint pdwOutput);
-        [DllImport("Lame_enc.dll")]
-        public static extern uint beFlushNoGap(uint hbeStream, [In, Out]byte[] pOutput, ref uint pdwOutput);
-        [DllImport("Lame_enc.dll", CharSet = CharSet.Ansi)]
-        public static extern uint beWriteInfoTag(uint hbeStream, string lpszFileName);
+        public static void beVersion([Out] BE_VERSION pbeVersion)
+        {
+            if(CPU.Is32Bit)
+            {
+                Lame86.beVersion(pbeVersion);
+            }
+            else
+            {
+                Lame64.beVersion(pbeVersion);
+            }
+        }
+
+        public static void beWriteVBRHeader(string pszMP3FileName)
+        {
+            if (CPU.Is32Bit)
+            {
+                Lame86.beWriteVBRHeader(pszMP3FileName);
+            }
+            else
+            {
+                Lame64.beWriteVBRHeader(pszMP3FileName);
+            }
+        }
+
+        public static uint beEncodeChunkFloatS16NI(uint hbeStream, uint nSamples, [In]float[] buffer_l, [In]float[] buffer_r, [In, Out]byte[] pOutput, ref uint pdwOutput)
+        {
+            return CPU.Is32Bit
+                ? Lame86.beEncodeChunkFloatS16NI(hbeStream, nSamples, buffer_l, buffer_r, pOutput, ref pdwOutput)
+                : Lame64.beEncodeChunkFloatS16NI(hbeStream, nSamples, buffer_l, buffer_r, pOutput, ref pdwOutput);
+        }
+
+        public static uint beFlushNoGap(uint hbeStream, [In, Out]byte[] pOutput, ref uint pdwOutput)
+        {
+            return CPU.Is32Bit
+                ? Lame86.beFlushNoGap(hbeStream, pOutput, ref pdwOutput)
+                : Lame64.beFlushNoGap(hbeStream, pOutput, ref pdwOutput);
+        }
+
+        public static uint beWriteInfoTag(uint hbeStream, string lpszFileName)
+        {
+            return CPU.Is32Bit
+                ? Lame86.beWriteInfoTag(hbeStream, lpszFileName)
+                : Lame64.beWriteInfoTag(hbeStream, lpszFileName);
+        }
     }
 }
