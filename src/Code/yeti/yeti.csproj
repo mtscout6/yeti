@@ -196,6 +196,13 @@
     <Compile Include="wma\internals\WMHeaderInfo.cs" />
     <Compile Include="wma\interfaces\IWmaStreamReader.cs" />
     <Compile Include="wma\interfaces\IWmaWriter.cs" />
+    <Compile Include="wma\repair\Guids\ASFGuids.cs" />
+    <Compile Include="wma\repair\Guids\HeaderExtensionGuids.cs" />
+    <Compile Include="wma\repair\fileObjects\DataProperties.cs" />
+    <Compile Include="wma\repair\fileObjects\FileProperties.cs" />
+    <Compile Include="wma\repair\Guids\HeaderGuids.cs" />
+    <Compile Include="wma\repair\Helper.cs" />
+    <Compile Include="wma\repair\WmaRepair.cs" />
     <Compile Include="wma\structs\Marker.cs" />
     <Compile Include="wma\structs\Script.cs" />
     <Compile Include="wma\structs\WMT_BUFFER_SEGMENT.cs" />
