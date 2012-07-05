@@ -145,7 +145,7 @@ namespace yeti.wma
         /// <param name="bufferMultiplier">The multiplier to use against the OptimalBufferSize of the file for the read buffer, sometimes a larger than optimal buffer size is better.</param>
         public static void Split(string inputFile, string outputFile, TimeSpan startTime, TimeSpan endTime, int bufferMultiplier)
         {
-            Split(inputFile, new FileStream(outputFile, FileMode.Create), startTime, endTime, bufferMultiplier);
+            Split(inputFile, new FileStream(outputFile, FileMode.Create, FileAccess.ReadWrite), startTime, endTime, bufferMultiplier);
         }
 
         /// <summary>
@@ -170,7 +170,7 @@ namespace yeti.wma
         /// <param name="bufferMultiplier">The multiplier to use against the OptimalBufferSize of the file for the read buffer, sometimes a larger than optimal buffer size is better.</param>
         public static void Split(string inputFile, Stream outputStream, TimeSpan startTime, TimeSpan endTime, int bufferMultiplier)
         {
-            Split(new FileStream(inputFile, FileMode.Open), outputStream, startTime, endTime, bufferMultiplier);
+            Split(new FileStream(inputFile, FileMode.Open, FileAccess.Read), outputStream, startTime, endTime, bufferMultiplier);
         }
 
         /// <summary>
@@ -195,7 +195,7 @@ namespace yeti.wma
         /// <param name="bufferMultiplier">The multiplier to use against the OptimalBufferSize of the file for the read buffer, sometimes a larger than optimal buffer size is better.</param>
         public static void Split(Stream inputStream, string outputFile, TimeSpan startTime, TimeSpan endTime, int bufferMultiplier)
         {
-            Split(inputStream, new FileStream(outputFile, FileMode.Create), startTime, endTime, bufferMultiplier);
+            Split(inputStream, new FileStream(outputFile, FileMode.Create, FileAccess.ReadWrite), startTime, endTime, bufferMultiplier);
         }
 
         /// <summary>
