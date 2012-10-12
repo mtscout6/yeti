@@ -50,8 +50,8 @@ namespace yeti.wma.repair.fileObjects
             Size = size;
         }
 
-        public long Size { get; set; }
-        public Guid FileId { get; set; }
-        public long TotalDataPackets { get; set; }
+        public long Size { get; private set; }
+        public Guid FileId { get; private set; }
+        public long TotalDataPackets { get; private set; }
     }
 }

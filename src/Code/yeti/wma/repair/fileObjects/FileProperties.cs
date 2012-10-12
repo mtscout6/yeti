@@ -40,12 +40,12 @@ namespace yeti.wma.repair.fileObjects
 
         public long Size { get; private set; }
         public Guid FileId { get; private set; }
-        public long FileSize { get; set; }
-        public DateTime CreationDate { get; set; }
-        public long DataPacketsCount { get; set; }
-        public TimeSpan PlayDuration { get; set; }
-        public TimeSpan SendDuration { get; set; }
-        public TimeSpan Preroll { get; set; }
+        public long FileSize { get; private set; }
+        public DateTime CreationDate { get; private set; }
+        public long DataPacketsCount { get; private set; }
+        public TimeSpan PlayDuration { get; private set; }
+        public TimeSpan SendDuration { get; private set; }
+        public TimeSpan Preroll { get; private set; }
         public bool Broadcast 
         { 
             get 
@@ -60,9 +60,9 @@ namespace yeti.wma.repair.fileObjects
                 return (_flagValue & FlagEnum.Seekable) == FlagEnum.Seekable;
             }
         }
-        public int MinimumDataPacketSize { get; set; }
-        public int MaximumDataPacketSize { get; set; }
-        public int MaximumBitrate { get; set; }
+        public int MinimumDataPacketSize { get; private set; }
+        public int MaximumDataPacketSize { get; private set; }
+        public int MaximumBitrate { get; private set; }
 
         public void WriteFlags(bool isBroadcast)
         {
