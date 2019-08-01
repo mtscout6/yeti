@@ -216,6 +216,7 @@
     <Compile Include="wma\structs\WM_STREAM_PRIORITY_RECORD.cs" />
     <Compile Include="wma\structs\WM_WRITER_STATISTICS.cs" />
     <Compile Include="wma\structs\WM_WRITER_STATISTICS_EX.cs" />
+    <Compile Include="mp3\Mp3Functions.cs" />
     <Compile Include="wma\WmaFunctions.cs" />
     <Compile Include="wma\WmaStreamReader.cs" />
     <Compile Include="wma\WmaWriter.cs" />
